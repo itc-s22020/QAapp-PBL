@@ -1,0 +1,17 @@
+.searchcontainer {
+    display: flex;
+    align-items: center;
+}
+
+.searchinput {
+    width: 300px; /* 検索欄の幅を調整 */
+    padding: 15px;
+    font-size: 20px;
+}
+
+.searchbutton {
+    margin-left: 15px;
+    padding: 10px 20px;
+    font-size: 18px;
+}
+
