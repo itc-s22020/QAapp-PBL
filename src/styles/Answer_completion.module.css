@@ -1,0 +1,45 @@
+.center_content {
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.centerText {
+    text-align: center; /* センタリングするためのテキストの配置 */
+}
+
+.center_button {
+    background: #eee;
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 240px;
+    padding: 10px 25px;
+    color: #313131;
+    transition: 0.3s ease-in-out;
+    font-weight: 500;
+    z-index:0;
+}
+.center_button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    display: block;
+    background: #6bb6ff;
+    transition: .3s;
+    left:0;
+}
+.center_button:hover {
+    color: #FFF;
+}
+.centerbutton:hover:before {
+    width: 100%;
+    z-index: -1;
+}
+
