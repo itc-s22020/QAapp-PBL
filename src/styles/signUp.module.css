@@ -1,8 +1,31 @@
-.container{
+/*.container{
+}
+
+.h1{
 	text-align: center;
 }
 
 .content{
 	width: 350px;
 	height: 200px;
+	padding: 16px 32px;
 }
+
+.input1,
+.input2,
+.input3,
+.input4{
+        padding: 7px 80px;
+}
+
+.button {
+   	padding: 16px 32px;
+  	font-size: 18px;
+  	background-color: #007bff;
+ 	color: white;
+  	border: none;
+  	border-radius: 8px;
+	cursor: pointer;
+	margin-top: 45%;
+}*/
+
