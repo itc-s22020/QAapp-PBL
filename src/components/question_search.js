@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../styles/QuestionSearch.module.css';
 
-const QuestionSearch = () => {
+const SearchField = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearchChange = (event) => {
@@ -14,7 +14,7 @@ const QuestionSearch = () => {
     };
 
     return (
-        <div className={styles.searchcontainer}>
+        <div className={`${styles.searchcontainer} ${styles.centered}`}>
             <form onSubmit={handleSearchSubmit}>
                 <input
                     type="text"
@@ -29,5 +29,5 @@ const QuestionSearch = () => {
     );
 }
 
-export default QuestionSearch;
+export default SearchField;
 
