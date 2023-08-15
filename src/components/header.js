@@ -1,7 +1,13 @@
-import Image from '../images/image/Q&Arogo.png'
+import Image from 'next/image'
+import logo from '../images/homelogo.png'
 
 export default function Header(){
 	return (
-		<header>HEADER</header>
+		<Image
+		src={logo}
+		width={300}
+		height={100}
+		alt=''
+		/>
 	)
 }
