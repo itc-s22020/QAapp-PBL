@@ -151,5 +151,5 @@ export default function signUp() {
           </Link>
         </div>
     </div>
-  );
+ );
 }
