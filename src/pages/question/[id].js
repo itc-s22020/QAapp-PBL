@@ -102,7 +102,6 @@ const Question = () => {
             q_id: id,
             a_text: answer
         }
-        console.log(data)
         fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/answer/new`, {
             method: 'post',
             credentials: 'include',
@@ -110,8 +109,8 @@ const Question = () => {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(r => r.json()).then((d) => {
-            console.log(d)
+        }).then(() => {
+            // 回答投稿完了ページにリダイレクトさせたい
         })
     }
     return (
