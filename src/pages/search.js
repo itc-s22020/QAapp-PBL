@@ -1,6 +1,6 @@
 import React from 'react';
-import SearchField from '../components/question_search.js'; 
-import styles from '../styles/QuestionSearch.module.css';
+import SearchField from '../components/search.js'; 
+import styles from '../styles/search.module.css';
 
 const QuestionSearch = () => {
     return (

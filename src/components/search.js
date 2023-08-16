@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../styles/QuestionSearch.module.css';
+import styles from '../styles/search.module.css';
 
 const SearchField = () => {
     const [searchQuery, setSearchQuery] = useState('');
