@@ -1,13 +1,13 @@
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
-import {Box, Button, TextField} from "@mui/material";
+import {Alert, Box, Button, TextField} from "@mui/material";
 import styles from "../../styles/Question.module.css"
 
 const AnswerForm = ({setAnswer, postAnswer, error}) =>
     <Box sx={{textAlign: 'left', mx: 2}}>
         <h2>回答を書き込む</h2>
-        <p>{error}</p>
+        {error ? <Alert sx={{mb: 1}} severity={"error"}>{error}</Alert> : <></>}
         <Box>
             <TextField name="answer" id="answer" minRows={5}
                               onChange={(e) => setAnswer(e.target.value)} fullWidth multiline></TextField>
@@ -194,7 +194,7 @@ const Question = () => {
                         <Post key={i} date={a.date} user_name={a.user_name} user_id={a.user_id} current_user={user}
                               like={a.like} text={a.a_text} a_id={a.a_id} deleteAnswer={deleteAnswer}/>
                     )}
-                    {!showAllAnswers ?
+                    {!showAllAnswers && question.answers.length > 3 ?
                         <Box sx={{m:1}}>
                             <Button sx={{width: '100%'}} variant={"contained"} size={"large"} onClick={() => setShowAllAnswers(true)}>その他の回答を表示する</Button>
                         </Box>
