@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import {Alert, Box, Button, TextField} from "@mui/material";
 import styles from "../../styles/Question.module.css"
+import Link from "next/link";
 
 const AnswerForm = ({setAnswer, postAnswer, error}) =>
     <Box sx={{textAlign: 'left', mx: 2}}>
@@ -48,7 +49,9 @@ const AnswerOrLogin = ({
                 </div>
                 <Button variant={"contained"} onClick={login}>ログインする</Button>
                 <Box sx={{m:1}}>
-                    <Button sx={{width: '100%'}} variant={'contained'} size={"large"} color={'success'}>ログインして回答を投稿する</Button>
+                    <Link href={"/login"}>
+                        <Button sx={{width: '100%'}} variant={'contained'} size={"large"} color={'success'}>ログインして回答を投稿する</Button>
+                    </Link>
                 </Box>
             </>
         )
@@ -61,7 +64,6 @@ const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer,
             </Box>
             <Box sx={{ml: 1}}>
                 {user_name} さん<br/>
-
                 {formatDate(date)}
             </Box>
             {/*回答データの場合は削除ボタンを表示する*/}
