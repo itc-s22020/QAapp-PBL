@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../styles/Answer_completion.module.css'; 
+import styles from '../styles/answer.module.css'; 
 import Link from 'next/link'
 
 const Answer = () => {
