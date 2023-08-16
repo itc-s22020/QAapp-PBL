@@ -74,7 +74,7 @@ const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer,
             }
         </Box>
         <div className={styles.contentText}>
-            {text}
+            {text.split('\n').map((s) => <>{s}<br/></>)}
         </div>
         <div className={styles.contentBottom}>
             {/*質問文の場合はカテゴリも表示する*/}
