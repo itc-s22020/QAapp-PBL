@@ -4,23 +4,24 @@ import { useState } from 'react';
 
 export default function signUp() {
   const [selectedOption, setSelectedOption] = useState('');
+  const [selectedName, setSelectedName] = useState('');
+  const [selectedEmail, setSelectedEmail] = useState('');
+  const [selectedPassword, setSelectedPassword] = useState('');
+  const [selectedPasswordconfirmation, setSelectedPasswordconfirmation] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
+  const [selectedGender, setSelectedGender] = useState('');
 
   const StartYear = 1970;
   const endYear = 2023;
 
   const months = [
-    '１月', '２月', '３月', '４月', '５月', '６月',
-    '７月', '８月', '９月', '１０月' ,'１１月' ,'１２月'
+    '1月', '2月', '3月', '4月', '5月', '6月',
+    '7月', '8月', '9月', '10月' ,'11月' ,'12月'
   ];
-  const days = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-    11, 12, 13, 14, 15, 16, 17, 18,
-    19, 20, 21, 22, 23, 24, 25, 26,
-    27, 28, 29, 30, 31
-  ];
+  
+  const days = Array.from({ length: 31 }, (_, index) => index + 1);
 
   const years = Array.from({ length: endYear - StartYear + 1 }, (_, index) => StartYear + index);
 
@@ -36,8 +37,28 @@ export default function signUp() {
     setSelectedMonth(e.target.value);
   };
 
+  const handleEmailChange = (e) => {
+    setSelectedEmail(e.target.value);
+  };
+
+  const handleNameChange = (e) => {
+    setSelectedName(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setSelectedPassword(e.target.value);
+  };
+
+  const handlePasswordconfirmationChange = (e) => {
+    setSelectedPasswordconfirmation(e.target.value);
+  };
+
   const handleDayChange = (e) => {
     setSelectedDay(e.target.value);
+  };
+
+  const handleGenderChange = (e) => {
+    setSelectedGender(e.target.value);
   };
 
   return (
@@ -47,29 +68,37 @@ export default function signUp() {
           <p>メールアドレス</p>
 	  <input
 	    className={styles.input1}
-	    type="text"
+	    type="e-mail"
 	    aria-label=".form-control-lg example"
+            value={selectedEmail}
+            onChange={handleEmailChange}
 	    required
 	  />
           <p>プロフィール名</p>
 	  <input
 	    className={styles.input2}
-	    type="text" 
+	    type="name" 
 	    aria-label=".form-control-lg example"
+	    value={selectedName}
+	    onChange={handleNameChange}
 	    required
 	  />
           <p>パスワード</p>
 	  <input
 	    className={styles.input3}
-	    type="text"
+	    type="password"
 	    aria-label=".form-control-lg example"
+	    value={selectedPassword}
+	    onChange={handlePasswordChange}
 	    required
 	  />
           <p>パスワード確認</p>
 	  <input
 	    className={styles.input4}
-	    type="text"
+	    type="password"
 	    aria-label=".form-control-lg example"
+            value={selectedPasswordconfirmation}
+            onChange={handlePasswordconfirmationChange}
 	    required
 	  />
 	  <p>性別</p>
@@ -79,7 +108,9 @@ export default function signUp() {
 	      type="radio"
 	      name="inlineRadioOptions"
 	      id="inlineRadio1"
-	      value="option1"
+	      value="男性"
+	      required
+	      onChange={handleGenderChange}
 	    />
             <label
 	      className="form-check-label"
@@ -93,7 +124,9 @@ export default function signUp() {
 	    type="radio"
 	    name="inlineRadioOptions"
 	    id="inlineRadio2" 
-	    value="option2"
+	    value="女性"
+	    required
+	    onChange={handleGenderChange}
 	  />
             <label
 	    className="form-check-label"
@@ -105,12 +138,14 @@ export default function signUp() {
 	      className="form-check-input"
 	      type="radio"
 	      name="inlineRadioOptions"
-	      id="inlineRadio2"
-	      value="option2"
+	      id="inlineRadio3"
+	      value="無回答"
+	      required
+	      onChange={handleGenderChange}
 	    />
             <label
 	      className="form-check-label"
-	      htmlFor="inlineRadio2">無回答
+	      htmlFor="inlineRadio3">無回答
 	    </label>
 	  </div>
 	  <p>生年月日</p>
@@ -119,7 +154,7 @@ export default function signUp() {
 	      <option value="">年</option>
 	      {years.map((year) => (
 		<option key={year} value={year}>
-	          {year}
+	          {year}年
 	        </option>
 	      ))}
 	    </select>
@@ -139,7 +174,7 @@ export default function signUp() {
 	      <option value="">日</option>
 	      {days.map((day, index) => (
 		<option key={index} value={day}>
-		  {day}
+		  {day}日
 		</option>
 	       ))}
 	     </select>
@@ -147,7 +182,14 @@ export default function signUp() {
 	</div>
         <div className={styles.footer}>
           <Link href="/login">
-            <button className={styles.button}>新規登録</button>
+            <button
+	      type="submit"
+	      id="button"
+	      className={styles.blueButton}
+	      disabled={!selectedName || !selectedGender || !selectedYear || !selectedMonth || !selectedDay} 
+	    >
+	    新規登録
+	    </button>
           </Link>
         </div>
     </div>
