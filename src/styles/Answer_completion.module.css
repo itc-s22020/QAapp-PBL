@@ -1,7 +1,7 @@
 .center_content {
     display: flex;
     flex-direction: column;
-    height: 70vh;
+    height: 50vh;
     align-items: center;
     justify-content: center;
 }
@@ -18,7 +18,7 @@
     align-items: center;
     margin: 0 auto;
     max-width: 240px;
-    padding: 10px 25px;
+    padding: 10px 30px;
     color: #313131;
     transition: 0.3s ease-in-out;
     font-weight: 500;
