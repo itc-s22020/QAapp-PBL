@@ -2,65 +2,77 @@ import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import styles from '@/styles/Home.module.css'
+import { useRouter } from "next/router";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
-const Home = () =>  {
+
+
+const Home = () => {
   const [alignment, setAlignment] = React.useState('new');
   const [props, setProps] = React.useState(false);
+  const [questions, setQuestions] = React.useState([]);
+
+  const compareLike = (a, b) =>{
+    var r = 0;
+    if (a.like < b.like){ r = -1 }
+    else if ( a.like > b.like ){ r = 1}
+    return r
+  } 
+
+  const qRes = () => {
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/question`)
+      .then((r) => r.json())
+      .then((d) => setQuestions(d))
+  }
+
+  const qLikeRes = () => {
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/question`)
+      .then((r) => r.json())
+      .then((d) => setQuestions(d.sort(compareLike)))
+  }
+
+  React.useEffect(() => {
+    qRes()
+  }, [])
 
   const handleChange = (event, newAlignment) => {
     if (newAlignment !== null) {
       setAlignment(newAlignment);
     }
     if (newAlignment === "new") {
-      setProps(npProps[0])
+      qRes()
     } else {
-      setProps(npProps[1])
+      qLikeRes()
     }
   };
 
-  const npProps = [
-    [
-      <ul>
-        <li>
-          <a>新着記事1</a>
-          <div>メッセージ1</div>
-        </li>
-        <li>
-          <a>新着記事2</a>
-          <div>メッセージ2</div>
-        </li>
-        <li>
-          <a>新着記事3</a>
-          <div>メッセージ3</div>
-        </li>
-      </ul>
-    ],
-    [
-      <ul>
-      <li>
-        <a>人気記事1</a>
-        <div>メッセージ1</div>
-      </li>
-      <li>
-        <a>人気記事2</a>
-        <div>メッセージ2</div>
-      </li>
-      <li>
-        <a>人気記事3</a>
-        <div>メッセージ3</div>
-      </li>
-    </ul>
-    ]
-  ]  
-
   const children = [
-    <ToggleButton value="new" key="left">
+    <ToggleButton value="new" key="left" className={styles.tb}>
       <div>新着</div>
     </ToggleButton>,
-    <ToggleButton value="pop" key="right">
+    <ToggleButton value="pop" key="right" className={styles.tb}>
       <div>人気</div>
     </ToggleButton>,
   ];
+
+  const Prop = ({ title, c_name, date, like }) => (
+    <div>
+      <ul>
+        <li>title: {title}</li>
+        <li>c_name: {c_name}</li>
+        <li>date: {date}</li>
+        <li>like: {like}</li>
+      </ul>
+    </div>
+  );
+
+
+  const NpProps = ({ q }) => (
+    <a>
+      {q.map(q => <Prop key={q.id} {...q} />)}
+    </a>
+  )
 
   const control = {
     value: alignment,
@@ -70,40 +82,15 @@ const Home = () =>  {
 
   return (
     <>
-    <Stack spacing={2} alignItems="center">
-      <ToggleButtonGroup size="large" {...control} aria-label="Large sizes">
-        {children}
-      </ToggleButtonGroup>
-    </Stack>
-    <div>{props ? props : npProps[0]}</div>
+      <Stack spacing={2} alignItems="center">
+        <ToggleButtonGroup size="large" {...control} aria-label="Large sizes">
+          {children}
+        </ToggleButtonGroup>
+      </Stack>
+      <div>
+        <NpProps q={questions} />
+      </div>
     </>
   );
 }
 export default Home
-/*import styles from "@/styles/Home.module.css"
-import { useState } from "react";
-
-const Home = () => {
-  const RADIO_VALUES = [["新着", true], ["人気", false]]
-  const [selectedRadioBtnValue, setSelectedRadioBtnValue] = useState("")
-  const onRadioBtnChanged = (e) => setSelectedRadioBtnValue(e.target.value)
-  return (
-    <div>
-      {RADIO_VALUES.map((radioValue) => (
-        <label key={radioValue[0]}>
-          <input
-            type="radio"
-            value={radioValue[1]}
-            name="sample"
-            onChange={onRadioBtnChanged}
-          />
-          {radioValue[0]}
-        </label>
-      ))}
-        <div>{selectedRadioBtnValue}</div>
-    </div>
-  )
-}
-
-export default Home
-*/
