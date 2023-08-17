@@ -1,0 +1,89 @@
+/* styles/profilepage.module.css */
+.profile_container {
+  border: 2px solid #ccc;
+  padding: 20px;
+  width: 565px; /* 幅を100%に設定 */
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 160px;
+  margin-left: 70px;
+}
+
+.profile_content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* 右寄せに設定 */
+  flex: 1; /* コンテンツを均等に広げるために追加 */
+}
+
+.catches {
+  display: flex; /* 横並びにするために追加 */
+  align-items: center; /* 垂直方向に中央寄せに設定 */
+  margin-bottom: 10px;
+  margin-right: 11px;  /* 右からの幅調整 */
+}
+
+.catches::after {
+  content: "";
+  display: inline-block; /* ブロック要素からインライン要素に変更 */
+  width: 165px;
+  height: 2px;
+  background-color: black;
+  margin-left: 5px; /* 棒線の間隔を調整 */
+}
+
+.hanako {
+   padding-right: 33%
+}
+
+.hanako01 {
+   padding-right: 25%;
+   padding: 10px;
+   margin-right: 151px;
+   margin-bottom: -25px;
+}
+
+.iconContainer { 
+  display: flex;
+  align-items: center;	
+}
+
+.icon {
+  width: 100px; /* アイコンのサイズ */
+  height: 100px;
+  background-color: white; /* アイコンの背景色 */
+  border-radius: 50%; /* 円形にするための丸み */
+  margin-right: 20px; /* アイコンとテキストの間隔 */
+  margin-top: 10px; /* 上方向のマージン */
+  margin-bottom: -45px; /* 下方向のマージン */
+  margin-left: -146px; /* 左方向のマージン */
+  margin-right: 10px; /* 右方向のマージン */
+  border: 2px solid #000;
+}
+
+.catches01 {
+  position: relative;
+  display: inline-block;	
+}
+
+.catches01::after {
+    content: "";
+    display: inline-block;
+    width: 392px;
+    height: 2px;
+    background-color: black;
+    position: absolute;
+    bottom: 7px;
+    left: -43px;
+}
+
+.catches01::before {
+    content: "";
+    display: inline-block;
+    width: 111px;
+    height: 2px;
+    background-color: black;
+    position: absolute;
+    bottom: 7px;
+    left: -256px;
+}
