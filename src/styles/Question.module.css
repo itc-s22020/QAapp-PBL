@@ -41,3 +41,8 @@
 .multiLine {
     margin: 0;
 }
+
+.icon {
+    border: 1px #D1D1E9 solid;
+    border-radius: 48px;
+}

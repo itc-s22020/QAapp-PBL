@@ -16,6 +16,7 @@ import styles from "../../styles/Question.module.css"
 import Link from "next/link";
 import IconLiked from '@mui/icons-material/Favorite';
 import IconNotLiked from '@mui/icons-material/FavoriteBorder';
+import Image from "next/image";
 
 const AnswerForm = ({setAnswer, postAnswer, error}) =>
     <Box sx={{textAlign: 'left', mx: 2}}>
@@ -98,8 +99,7 @@ const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer,
     return (
         <div className={styles.content}>
             <Box className={styles.user} sx={{display: 'flex'}}>
-                <Box sx={{width: 50, height: 50, border: '1px black solid', borderRadius: 10}}>
-                </Box>
+                <UserIcon user_id={user_id}/>
                 <Box sx={{ml: 1}}>
                     {user_name} さん<br/>
                     {formatDate(date)}
@@ -124,6 +124,8 @@ const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer,
         </div>
     )
 }
+
+const UserIcon = ({user_id}) => <Image src={`http://localhost:8080/api/icons/${user_id}`} alt={user_id} className={styles.icon} width={50} height={50}/>
 
 const DisplayLikeButton = ({current_user, isLiked, setLiked, setLikes, likes, type, id}) => {
     if (current_user) {
