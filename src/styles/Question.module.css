@@ -1,0 +1,39 @@
+.page {
+    background-color: #F6EEEE;
+    color: #2B2C34;
+}
+
+.container {
+    margin-right: 256px;
+    margin-left: 256px;
+    min-width: 500px;
+    border: 1px #D1D1E9 solid;
+    background-color: #FFFFFE;
+    text-align: center;
+}
+
+.content {
+    margin: 16px;
+    padding-right: 16px;
+    padding-left: 16px;
+    border: 1px #D1D1E9 solid;
+    text-align: left;
+}
+
+.contentBottom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.textLeft {
+    text-align: left;
+    margin-left: 16px;
+}
+
+.user {
+    margin-top: 8px;
+}
+
+.contentText {
+    margin-top: 8px;
+}

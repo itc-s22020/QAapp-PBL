@@ -1,23 +1,50 @@
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+import {
+    Alert,
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle, IconButton,
+    TextField
+} from "@mui/material";
+import styles from "../../styles/Question.module.css"
+import Link from "next/link";
+import IconLiked from '@mui/icons-material/Favorite';
+import IconNotLiked from '@mui/icons-material/FavoriteBorder';
 
-const AnswerForm = ({setAnswer, postAnswer}) =>
-    <div className="answer">
-        <label htmlFor="answer">
-            <h2>回答を書き込む</h2>
-        </label>
-        <textarea name="answer" id="answer" cols="100" rows="5"
-                  onChange={(e) => setAnswer(e.target.value)}></textarea>
-        <button onClick={postAnswer}>回答を投稿する</button>
-    </div>
+const AnswerForm = ({setAnswer, postAnswer, error}) =>
+    <Box sx={{textAlign: 'left', mx: 2}}>
+        <h2>回答を書き込む</h2>
+        {error ? <Alert sx={{mb: 1}} severity={"error"}>{error}</Alert> : <></>}
+        <Box>
+            <TextField name="answer" id="answer" minRows={5}
+                       onChange={(e) => setAnswer(e.target.value)} fullWidth multiline></TextField>
+        </Box>
+        <Button sx={{mt: 2}} size={"large"} variant={"contained"} onClick={postAnswer}>回答を投稿する</Button>
+    </Box>
 
-const AnswerOrLogin = ({user, setAnswer, postAnswer, setInputUser, setInputPassword, inputUser, inputPassword, login, logout}) => {
+const AnswerOrLogin = ({
+                           user,
+                           setAnswer,
+                           postAnswer,
+                           setInputUser,
+                           setInputPassword,
+                           inputUser,
+                           inputPassword,
+                           login,
+                           logout,
+                           error
+                       }) => {
     if (user) {
         return (
             <>
                 {user}としてログイン中 <button onClick={logout}>ログアウトする</button>
-                <AnswerForm setAnswer={setAnswer} postAnswer={postAnswer}/>
+                <AnswerForm setAnswer={setAnswer} postAnswer={postAnswer} error={error}/>
             </>
         )
     } else {
@@ -29,16 +56,116 @@ const AnswerOrLogin = ({user, setAnswer, postAnswer, setInputUser, setInputPassw
                 </div>
                 <div className="">
                     <label htmlFor="password">Password</label>
-                    <input type="password" id="password" value={inputPassword} onChange={(e) => setInputPassword(e.target.value)}/>
+                    <input type="password" id="password" value={inputPassword}
+                           onChange={(e) => setInputPassword(e.target.value)}/>
                 </div>
-                <button onClick={login}>ログインする</button>
-                <p>
-                    <button>ログインして回答を投稿する</button>
-                </p>
+                <Button variant={"contained"} onClick={login}>ログインする</Button>
+                <Box sx={{m: 1}}>
+                    <Link href={"/login"}>
+                        <Button sx={{width: '100%'}} variant={'contained'} size={"large"}
+                                color={'success'}>ログインして回答を投稿する</Button>
+                    </Link>
+                </Box>
             </>
         )
     }
 }
+const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer, a_id, q_id, c_name}) => {
+    const [isLiked, setLiked] = useState(false)
+    const data = {
+        id: a_id ? a_id : q_id
+    }
+    const type = a_id ? 'answer' : 'question'
+    useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/${type}/liked`, {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+            .then((r) => r.json())
+            .then((d) => {
+                console.log(d)
+                setLiked(d['liked'])
+            })
+    }, [])
+    return (
+        <div className={styles.content}>
+            <Box className={styles.user} sx={{display: 'flex'}}>
+                <Box sx={{width: 50, height: 50, border: '1px black solid', borderRadius: 10}}>
+                </Box>
+                <Box sx={{ml: 1}}>
+                    {user_name} さん<br/>
+                    {formatDate(date)}
+                </Box>
+                {/*回答データの場合は削除ボタンを表示する*/}
+                {a_id && user_id === current_user ?
+                    <DeleteButton text={text} deleteAnswer={deleteAnswer} a_id={a_id}/>
+                    : <></>
+                }
+            </Box>
+            <div className={styles.contentText}>
+                {convertLFtoBR(text)}
+            </div>
+            <div className={styles.contentBottom}>
+                {/*質問文の場合はカテゴリも表示する*/}
+                {c_name ? <p>{c_name}</p> : <p></p>}
+                <Box sx={{ml: 2, display: 'flex', alignItems: 'center'}}>
+                    {isLiked ? <UnLikeButton /> : <LikeButton />}
+                    <p>{like} いいね</p>
+                </Box>
+            </div>
+        </div>
+    )
+}
+
+const UnLikeButton = () =>
+    <IconButton>
+        <IconLiked fontSize={"large"} color={"error"}/>
+    </IconButton>
+
+const LikeButton = () =>
+    <IconButton>
+        <IconNotLiked fontSize={"large"} color={"error"}/>
+    </IconButton>
+
+const DeleteButton = ({text, a_id, deleteAnswer}) => {
+    const [open, setOpen] = useState(false)
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => setOpen(false)
+    const handleDelete = () => deleteAnswer(a_id)
+    return (
+        <Box sx={{ml: 1}}>
+            <Button variant={"contained"}
+                    onClick={handleOpen}>削除する</Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>本当に削除してよろしいですか？</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>{convertLFtoBR(text)}</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant={"outlined"} onClick={handleClose}>キャンセル</Button>
+                    <Button variant={"contained"} onClick={handleDelete} color={"error"}>削除する</Button>
+                </DialogActions>
+            </Dialog>
+        </Box>
+    )
+}
+
+const formatDate = (s) => {
+    const d = new Date(s)
+    const [year, month, day, hour, minute] = [
+        d.getFullYear().toString().padStart(4, 0),
+        (d.getMonth() + 1).toString().padStart(2, 0),
+        d.getDate().toString().padStart(2, 0),
+        d.getHours().toString().padStart(2, 0),
+        d.getMinutes().toString().padStart(2, 0)
+    ]
+    return `${year}/${month}/${day} ${hour}:${minute}`
+}
+const convertLFtoBR = (s) => s.split('\n').map((s) => <>{s}<br/></>)
 const Question = () => {
     const router = useRouter()
     const [question, setQuestion] = useState()
@@ -46,23 +173,14 @@ const Question = () => {
     const [answer, setAnswer] = useState('')
     const [inputUser, setInputUser] = useState('')
     const [inputPassword, setInputPassword] = useState('')
+    const [error, setError] = useState('')
+    const [showAllAnswers, setShowAllAnswers] = useState(false)
     const {id} = router.query
     const checkLogin = () => {
         fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/check`, {
             credentials: "include"
         }).then((r) => r.json())
             .then((d) => setUser(d.user))
-    }
-    const formatDate = (s) => {
-        const d = new Date(s)
-        const [year, month, day, hour, minute] = [
-            d.getFullYear(),
-            d.getMonth(),
-            d.getDate(),
-            d.getHours(),
-            d.getMinutes()
-        ]
-        return `${year}/${month}/${day} ${hour}:${minute}`
     }
     useEffect(() => {
         if (!id) return
@@ -109,43 +227,64 @@ const Question = () => {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(() => {
-            // 回答投稿完了ページにリダイレクトさせたい
+        }).then((r) => {
+            if (r.status === 200) {
+                return r.json()
+            } else {
+                return r.json().then((d) => setError(d.message))
+            }
+        }).then((d) => {
+            if (!d) return
+            router.push({
+                pathname: '/answer',
+                query: {q_id: id}
+            })
+        })
+    }
+    const deleteAnswer = async (a_id) => {
+        const data = {
+            id: a_id
+        }
+        await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/answer/delete`, {
+            method: 'post',
+            credentials: 'include',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((r) => {
+            router.reload()
         })
     }
     return (
         <>
-            <div className="title">
-                <h1>{question.title}</h1>
+            <div className={styles.page}>
+                <div className={styles.container}>
+                    <h1 className={styles.textLeft}>{question.title}</h1>
+                    <Post text={question.q_text} like={question.like} date={question.date} user_id={question.user_id}
+                          user_name={question.user_name} c_name={question.c_name} q_id={question.q_id}/>
+                    <h1 className={styles.textLeft}>回答</h1>
+                    {question.answers.slice(0, showAllAnswers ? undefined : 3).map((a, i) =>
+                        <Post key={i} date={a.date} user_name={a.user_name} user_id={a.user_id} current_user={user}
+                              like={a.like} text={a.a_text} a_id={a.a_id} deleteAnswer={deleteAnswer}/>
+                    )}
+                    {!showAllAnswers && question.answers.length > 3 ?
+                        <Box sx={{m: 1}}>
+                            <Button sx={{width: '100%'}} variant={"contained"} size={"large"}
+                                    onClick={() => setShowAllAnswers(true)}>その他の回答を表示する</Button>
+                        </Box>
+                        : <></>}
+                    {/*<p>{token}</p>*/}
+                    {/*<AnswerOrLogin/>*/}
+                    {
+                        <AnswerOrLogin user={user} setAnswer={setAnswer} postAnswer={() => postAnswer(answer)}
+                                       setInputUser={setInputUser} setInputPassword={setInputPassword}
+                                       inputUser={inputUser}
+                                       inputPassword={inputPassword} login={login} logout={logout}
+                                       error={error}/>
+                    }
+                </div>
             </div>
-            <div className="user">
-                <h3>by {question.user_name}</h3>
-                <p>{question.view} 回閲覧 {question.like} いいね</p>
-                <p>{formatDate(question.date)}</p>
-            </div>
-            <hr/>
-            <div className="text">
-                <p>{question.q_text}</p>
-            </div>
-            <hr/>
-            <div className="answers">
-                <h1>回答</h1>
-                {question.answers.map((a, i) => (
-                        <div key={i} className="answer">
-                            <h4>by {a.user_name}</h4>
-                            <p>{a.a_text}</p>
-                            <p>{a.like} いいね</p>
-                        </div>
-                    )
-                )}
-            </div>
-            <hr/>
-            {/*<p>{token}</p>*/}
-            {/*<AnswerOrLogin/>*/}
-            {
-                <AnswerOrLogin user={user} setAnswer={setAnswer} postAnswer={() => postAnswer(answer)} setInputUser={setInputUser} setInputPassword={setInputPassword} inputUser={inputUser} inputPassword={inputPassword} login={login} logout={logout}/>
-            }
-            <hr/>
         </>
     )
 }
