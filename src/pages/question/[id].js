@@ -38,13 +38,14 @@ const AnswerOrLogin = ({
                            inputPassword,
                            login,
                            logout,
-                           error
+                           error,
+                           question
                        }) => {
     if (user) {
         return (
             <>
                 {user}としてログイン中 <button onClick={logout}>ログアウトする</button>
-                <AnswerForm setAnswer={setAnswer} postAnswer={postAnswer} error={error}/>
+                {question.user_id !== user ? <AnswerForm setAnswer={setAnswer} postAnswer={postAnswer} error={error}/> : <></>}
             </>
         )
     } else {
@@ -281,7 +282,7 @@ const Question = () => {
                                        setInputUser={setInputUser} setInputPassword={setInputPassword}
                                        inputUser={inputUser}
                                        inputPassword={inputPassword} login={login} logout={logout}
-                                       error={error}/>
+                                       error={error} question={question}/>
                     }
                 </div>
             </div>
