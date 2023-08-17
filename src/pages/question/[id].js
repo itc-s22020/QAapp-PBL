@@ -1,7 +1,17 @@
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
-import {Alert, Box, Button, TextField} from "@mui/material";
+import {
+    Alert,
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    TextField
+} from "@mui/material";
 import styles from "../../styles/Question.module.css"
 import Link from "next/link";
 
@@ -68,15 +78,12 @@ const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer,
             </Box>
             {/*回答データの場合は削除ボタンを表示する*/}
             {a_id && user_id === current_user ?
-                <Box sx={{ml: 1}}>
-                    <Button variant={"contained"}
-                            onClick={() => deleteAnswer(a_id)}>削除する</Button>
-                </Box>
+                <DeleteButton text={text} deleteAnswer={deleteAnswer} a_id={a_id}/>
                 : <></>
             }
         </Box>
         <div className={styles.contentText}>
-            {text.split('\n').map((s) => <>{s}<br/></>)}
+            {convertLFtoBR(text)}
         </div>
         <div className={styles.contentBottom}>
             {/*質問文の場合はカテゴリも表示する*/}
@@ -86,6 +93,29 @@ const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer,
             </Box>
         </div>
     </div>
+
+const DeleteButton = ({text, a_id, deleteAnswer}) => {
+    const [open, setOpen] = useState(false)
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => setOpen(false)
+    const handleDelete = () => deleteAnswer(a_id)
+    return (
+        <Box sx={{ml: 1}}>
+            <Button variant={"contained"}
+                    onClick={handleOpen}>削除する</Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>本当に削除してよろしいですか？</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>{convertLFtoBR(text)}</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant={"outlined"} onClick={handleClose}>キャンセル</Button>
+                    <Button variant={"contained"} onClick={handleDelete} color={"error"}>削除する</Button>
+                </DialogActions>
+            </Dialog>
+        </Box>
+    )
+}
 
 const formatDate = (s) => {
     const d = new Date(s)
@@ -98,6 +128,7 @@ const formatDate = (s) => {
     ]
     return `${year}/${month}/${day} ${hour}:${minute}`
 }
+const convertLFtoBR = (s) => s.split('\n').map((s) => <>{s}<br/></>)
 const Question = () => {
     const router = useRouter()
     const [question, setQuestion] = useState()
