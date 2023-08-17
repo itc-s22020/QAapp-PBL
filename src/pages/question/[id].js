@@ -201,7 +201,10 @@ const Question = () => {
             }
         }).then((d) => {
             if (!d) return
-            router.reload()
+            router.push({
+                pathname: '/answer',
+                query: {q_id: id}
+            })
         })
     }
     const deleteAnswer = async (a_id) => {
