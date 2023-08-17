@@ -5,7 +5,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import styles from '@/styles/Home.module.css'
 import { useRouter } from "next/router";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
-
+import { formatDate } from '@/lib/formatDate';
 
 
 const Home = () => {
@@ -15,15 +15,18 @@ const Home = () => {
 
   const compareLike = (a, b) =>{
     var r = 0;
-    if (a.like < b.like){ r = -1 }
-    else if ( a.like > b.like ){ r = 1}
+    if (a.like > b.like){ r = -1 }
+    else if ( a.like < b.like ){ r = 1}
     return r
   } 
+  const compareDate = (a, b) =>{
+    return (formatDate(a.date) < formatDate(b.date) ? 1 : -1)
+  }
 
   const qRes = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/question`)
       .then((r) => r.json())
-      .then((d) => setQuestions(d))
+      .then((d) => setQuestions(d.sort(compareDate)))
   }
 
   const qLikeRes = () => {
@@ -61,7 +64,7 @@ const Home = () => {
       <ul>
         <li>title: {title}</li>
         <li>c_name: {c_name}</li>
-        <li>date: {date}</li>
+        <li>date: {formatDate(date)}</li>
         <li>like: {like}</li>
       </ul>
     </div>
