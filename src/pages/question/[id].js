@@ -38,13 +38,14 @@ const AnswerOrLogin = ({
                            inputPassword,
                            login,
                            logout,
-                           error
+                           error,
+                           question
                        }) => {
     if (user) {
         return (
             <>
                 {user}としてログイン中 <button onClick={logout}>ログアウトする</button>
-                <AnswerForm setAnswer={setAnswer} postAnswer={postAnswer} error={error}/>
+                {question.user_id !== user ? <AnswerForm setAnswer={setAnswer} postAnswer={postAnswer} error={error}/> : <></>}
             </>
         )
     } else {
@@ -72,11 +73,17 @@ const AnswerOrLogin = ({
 }
 const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer, a_id, q_id, c_name}) => {
     const [isLiked, setLiked] = useState(false)
-    const data = {
-        id: a_id ? a_id : q_id
-    }
+    const [likes, setLikes] = useState(like)
+    const id = a_id ? a_id : q_id
     const type = a_id ? 'answer' : 'question'
     useEffect(() => {
+        // ログインをしていない場合はいいね状態をチェックしない
+        if (!current_user) {
+            return
+        }
+        const data = {
+            id: id
+        }
         fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/${type}/liked`, {
             method: 'post',
             body: JSON.stringify(data),
@@ -86,11 +93,8 @@ const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer,
             credentials: 'include'
         })
             .then((r) => r.json())
-            .then((d) => {
-                console.log(d)
-                setLiked(d['liked'])
-            })
-    }, [])
+            .then((d) => setLiked(d['liked']))
+    }, [id, type])
     return (
         <div className={styles.content}>
             <Box className={styles.user} sx={{display: 'flex'}}>
@@ -107,30 +111,85 @@ const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer,
                 }
             </Box>
             <div className={styles.contentText}>
-                {convertLFtoBR(text)}
+                {MultilineText(text)}
             </div>
             <div className={styles.contentBottom}>
                 {/*質問文の場合はカテゴリも表示する*/}
                 {c_name ? <p>{c_name}</p> : <p></p>}
                 <Box sx={{ml: 2, display: 'flex', alignItems: 'center'}}>
-                    {isLiked ? <UnLikeButton /> : <LikeButton />}
-                    <p>{like} いいね</p>
+                    <DisplayLikeButton current_user={current_user} isLiked={isLiked} setLiked={setLiked} setLikes={setLikes} likes={likes} type={type} id={id}/>
+                    <p>{likes} いいね</p>
                 </Box>
             </div>
         </div>
     )
 }
 
-const UnLikeButton = () =>
-    <IconButton>
-        <IconLiked fontSize={"large"} color={"error"}/>
-    </IconButton>
+const DisplayLikeButton = ({current_user, isLiked, setLiked, setLikes, likes, type, id}) => {
+    if (current_user) {
+        if (isLiked) {
+            return <UnLikeButton setLiked={setLiked} setLikes={setLikes} likes={likes} type={type} id={id}/>
+        } else {
+            return <LikeButton setLiked={setLiked} setLikes={setLikes} likes={likes} type={type} id={id}/>
+        }
+    }
+    return <DisabledLikeButton />
+}
 
-const LikeButton = () =>
-    <IconButton>
-        <IconNotLiked fontSize={"large"} color={"error"}/>
-    </IconButton>
+const UnLikeButton = ({setLiked, setLikes, likes, type, id}) => {
+    const unlike = () => {
+        const data = {id: id}
+        fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/${type}/unlike`, {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+            .then((r) => r.json())
+            .then((d) => {
+                setLikes(likes - 1)
+                setLiked(false)
+            })
+    }
+    return (
+        <IconButton onClick={unlike}>
+            <IconLiked fontSize={"large"} color={"error"}/>
+        </IconButton>
+    )
+}
 
+const LikeButton = ({setLiked, setLikes, likes, type, id}) => {
+    const like = () => {
+        const data = {id: id}
+        fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/${type}/like`, {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+            .then((r) => r.json())
+            .then((d) => {
+                setLikes(likes + 1)
+                setLiked(true)
+            })
+    }
+    return (
+        <IconButton onClick={like}>
+            <IconNotLiked fontSize={"large"} color={"error"}/>
+        </IconButton>
+    )
+}
+
+const DisabledLikeButton = () =>
+    <Link href={"/login"}>
+        <IconButton>
+            <IconNotLiked fontSize={"large"} color={"error"}/>
+        </IconButton>
+    </Link>
 const DeleteButton = ({text, a_id, deleteAnswer}) => {
     const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
@@ -143,7 +202,7 @@ const DeleteButton = ({text, a_id, deleteAnswer}) => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>本当に削除してよろしいですか？</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>{convertLFtoBR(text)}</DialogContentText>
+                    {text.split('\n').map((s) => <DialogContentText key={s}>{s}</DialogContentText>)}
                 </DialogContent>
                 <DialogActions>
                     <Button variant={"outlined"} onClick={handleClose}>キャンセル</Button>
@@ -165,7 +224,8 @@ const formatDate = (s) => {
     ]
     return `${year}/${month}/${day} ${hour}:${minute}`
 }
-const convertLFtoBR = (s) => s.split('\n').map((s) => <>{s}<br/></>)
+const MultilineText = (s) =>
+    s.split('\n').map((line) => <p key={line} className={styles.multiLine}>{line}</p>)
 const Question = () => {
     const router = useRouter()
     const [question, setQuestion] = useState()
@@ -262,7 +322,7 @@ const Question = () => {
                 <div className={styles.container}>
                     <h1 className={styles.textLeft}>{question.title}</h1>
                     <Post text={question.q_text} like={question.like} date={question.date} user_id={question.user_id}
-                          user_name={question.user_name} c_name={question.c_name} q_id={question.q_id}/>
+                          current_user={user} user_name={question.user_name} c_name={question.c_name} q_id={question.q_id}/>
                     <h1 className={styles.textLeft}>回答</h1>
                     {question.answers.slice(0, showAllAnswers ? undefined : 3).map((a, i) =>
                         <Post key={i} date={a.date} user_name={a.user_name} user_id={a.user_id} current_user={user}
@@ -281,7 +341,7 @@ const Question = () => {
                                        setInputUser={setInputUser} setInputPassword={setInputPassword}
                                        inputUser={inputUser}
                                        inputPassword={inputPassword} login={login} logout={logout}
-                                       error={error}/>
+                                       error={error} question={question}/>
                     }
                 </div>
             </div>
