@@ -37,3 +37,7 @@
 .contentText {
     margin-top: 8px;
 }
+
+.multiLine {
+    margin: 0;
+}
