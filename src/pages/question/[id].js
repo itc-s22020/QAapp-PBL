@@ -9,7 +9,7 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle,
+    DialogTitle, IconButton,
     TextField
 } from "@mui/material";
 import styles from "../../styles/Question.module.css"
@@ -23,7 +23,7 @@ const AnswerForm = ({setAnswer, postAnswer, error}) =>
         {error ? <Alert sx={{mb: 1}} severity={"error"}>{error}</Alert> : <></>}
         <Box>
             <TextField name="answer" id="answer" minRows={5}
-                              onChange={(e) => setAnswer(e.target.value)} fullWidth multiline></TextField>
+                       onChange={(e) => setAnswer(e.target.value)} fullWidth multiline></TextField>
         </Box>
         <Button sx={{mt: 2}} size={"large"} variant={"contained"} onClick={postAnswer}>回答を投稿する</Button>
     </Box>
@@ -60,42 +60,76 @@ const AnswerOrLogin = ({
                            onChange={(e) => setInputPassword(e.target.value)}/>
                 </div>
                 <Button variant={"contained"} onClick={login}>ログインする</Button>
-                <Box sx={{m:1}}>
+                <Box sx={{m: 1}}>
                     <Link href={"/login"}>
-                        <Button sx={{width: '100%'}} variant={'contained'} size={"large"} color={'success'}>ログインして回答を投稿する</Button>
+                        <Button sx={{width: '100%'}} variant={'contained'} size={"large"}
+                                color={'success'}>ログインして回答を投稿する</Button>
                     </Link>
                 </Box>
             </>
         )
     }
 }
-const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer, a_id, c_name}) =>
-    <div className={styles.content}>
-        <Box className={styles.user} sx={{display: 'flex'}}>
-            <Box sx={{width: 50, height: 50, border: '1px black solid', borderRadius: 10}}>
+const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer, a_id, q_id, c_name}) => {
+    const [isLiked, setLiked] = useState(false)
+    const data = {
+        id: a_id ? a_id : q_id
+    }
+    const type = a_id ? 'answer' : 'question'
+    useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/${type}/liked`, {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+            .then((r) => r.json())
+            .then((d) => {
+                console.log(d)
+                setLiked(d['liked'])
+            })
+    }, [])
+    return (
+        <div className={styles.content}>
+            <Box className={styles.user} sx={{display: 'flex'}}>
+                <Box sx={{width: 50, height: 50, border: '1px black solid', borderRadius: 10}}>
+                </Box>
+                <Box sx={{ml: 1}}>
+                    {user_name} さん<br/>
+                    {formatDate(date)}
+                </Box>
+                {/*回答データの場合は削除ボタンを表示する*/}
+                {a_id && user_id === current_user ?
+                    <DeleteButton text={text} deleteAnswer={deleteAnswer} a_id={a_id}/>
+                    : <></>
+                }
             </Box>
-            <Box sx={{ml: 1}}>
-                {user_name} さん<br/>
-                {formatDate(date)}
-            </Box>
-            {/*回答データの場合は削除ボタンを表示する*/}
-            {a_id && user_id === current_user ?
-                <DeleteButton text={text} deleteAnswer={deleteAnswer} a_id={a_id}/>
-                : <></>
-            }
-        </Box>
-        <div className={styles.contentText}>
-            {convertLFtoBR(text)}
+            <div className={styles.contentText}>
+                {convertLFtoBR(text)}
+            </div>
+            <div className={styles.contentBottom}>
+                {/*質問文の場合はカテゴリも表示する*/}
+                {c_name ? <p>{c_name}</p> : <p></p>}
+                <Box sx={{ml: 2, display: 'flex', alignItems: 'center'}}>
+                    {isLiked ? <UnLikeButton /> : <LikeButton />}
+                    <p>{like} いいね</p>
+                </Box>
+            </div>
         </div>
-        <div className={styles.contentBottom}>
-            {/*質問文の場合はカテゴリも表示する*/}
-            {c_name ? <p>{c_name}</p> : <p></p>}
-            <Box sx={{ml: 2, display: 'flex', alignItems: 'center'}}>
-                <IconNotLiked fontSize={"large"}/>
-                <p>{like} いいね</p>
-            </Box>
-        </div>
-    </div>
+    )
+}
+
+const UnLikeButton = () =>
+    <IconButton>
+        <IconLiked fontSize={"large"} color={"error"}/>
+    </IconButton>
+
+const LikeButton = () =>
+    <IconButton>
+        <IconNotLiked fontSize={"large"} color={"error"}/>
+    </IconButton>
 
 const DeleteButton = ({text, a_id, deleteAnswer}) => {
     const [open, setOpen] = useState(false)
@@ -227,17 +261,19 @@ const Question = () => {
             <div className={styles.page}>
                 <div className={styles.container}>
                     <h1 className={styles.textLeft}>{question.title}</h1>
-                    <Post text={question.q_text} like={question.like} date={question.date} user_id={question.user_id} user_name={question.user_name} c_name={question.c_name}/>
+                    <Post text={question.q_text} like={question.like} date={question.date} user_id={question.user_id}
+                          user_name={question.user_name} c_name={question.c_name} q_id={question.q_id}/>
                     <h1 className={styles.textLeft}>回答</h1>
                     {question.answers.slice(0, showAllAnswers ? undefined : 3).map((a, i) =>
                         <Post key={i} date={a.date} user_name={a.user_name} user_id={a.user_id} current_user={user}
                               like={a.like} text={a.a_text} a_id={a.a_id} deleteAnswer={deleteAnswer}/>
                     )}
                     {!showAllAnswers && question.answers.length > 3 ?
-                        <Box sx={{m:1}}>
-                            <Button sx={{width: '100%'}} variant={"contained"} size={"large"} onClick={() => setShowAllAnswers(true)}>その他の回答を表示する</Button>
+                        <Box sx={{m: 1}}>
+                            <Button sx={{width: '100%'}} variant={"contained"} size={"large"}
+                                    onClick={() => setShowAllAnswers(true)}>その他の回答を表示する</Button>
                         </Box>
-                    : <></>}
+                        : <></>}
                     {/*<p>{token}</p>*/}
                     {/*<AnswerOrLogin/>*/}
                     {
