@@ -6,11 +6,11 @@ import styles from '@/styles/Home.module.css'
 import { useRouter } from "next/router";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import { formatDate } from '@/lib/formatDate';
+import Link from 'next/link';
 
 
 const Home = () => {
   const [alignment, setAlignment] = React.useState('new');
-  const [props, setProps] = React.useState(false);
   const [questions, setQuestions] = React.useState([]);
 
   const compareLike = (a, b) =>{
@@ -29,8 +29,9 @@ const Home = () => {
       .then((d) => setQuestions(d.sort(V ? compareDate : compareLike) ))
   }
 
+
   React.useEffect(() => {
-    qRes()
+    qRes(true)
   }, [])
 
   const handleChange = (event, newAlignment) => {
@@ -53,10 +54,12 @@ const Home = () => {
     </ToggleButton>,
   ];
 
-  const Prop = ({ title, c_name, date, like }) => (
+  const Prop = ({ q_id, title, c_name, date, like }) => (
     <div>
       <ul>
-        <li>title: {title}</li>
+        <Link href={`/question/${q_id}`}>
+          <li>title: {title}</li>
+        </Link>
         <li>c_name: {c_name}</li>
         <li>date: {formatDate(date)}</li>
         <li>like: {like}</li>
