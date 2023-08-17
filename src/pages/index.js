@@ -23,16 +23,10 @@ const Home = () => {
     return (formatDate(a.date) < formatDate(b.date) ? 1 : -1)
   }
 
-  const qRes = () => {
+  const qRes = (V=false) => {
     fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/question`)
       .then((r) => r.json())
-      .then((d) => setQuestions(d.sort(compareDate)))
-  }
-
-  const qLikeRes = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/question`)
-      .then((r) => r.json())
-      .then((d) => setQuestions(d.sort(compareLike)))
+      .then((d) => setQuestions(d.sort(V ? compareDate : compareLike) ))
   }
 
   React.useEffect(() => {
@@ -44,9 +38,9 @@ const Home = () => {
       setAlignment(newAlignment);
     }
     if (newAlignment === "new") {
-      qRes()
+      qRes(true)
     } else {
-      qLikeRes()
+      qRes(false)
     }
   };
 
