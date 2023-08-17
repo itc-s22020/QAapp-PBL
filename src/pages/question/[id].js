@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import styles from "../../styles/Question.module.css"
 import Link from "next/link";
+import IconLiked from '@mui/icons-material/Favorite';
+import IconNotLiked from '@mui/icons-material/FavoriteBorder';
 
 const AnswerForm = ({setAnswer, postAnswer, error}) =>
     <Box sx={{textAlign: 'left', mx: 2}}>
@@ -87,8 +89,9 @@ const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer,
         </div>
         <div className={styles.contentBottom}>
             {/*質問文の場合はカテゴリも表示する*/}
-            {c_name ? <p>{c_name}</p> : <></>}
-            <Box sx={{ml: 2}}>
+            {c_name ? <p>{c_name}</p> : <p></p>}
+            <Box sx={{ml: 2, display: 'flex', alignItems: 'center'}}>
+                <IconNotLiked fontSize={"large"}/>
                 <p>{like} いいね</p>
             </Box>
         </div>

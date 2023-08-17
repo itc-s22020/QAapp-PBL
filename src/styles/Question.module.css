@@ -22,7 +22,7 @@
 
 .contentBottom {
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
 }
 
 .textLeft {
