@@ -3,7 +3,6 @@ import Stack from '@mui/material/Stack';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import styles from '@/styles/Home.module.css'
-import { useRouter } from "next/router";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import { formatDate } from '@/lib/formatDate';
 import Link from 'next/link';
@@ -13,27 +12,29 @@ const Home = () => {
   const [alignment, setAlignment] = React.useState('new');
   const [questions, setQuestions] = React.useState([]);
 
-  const compareLike = (a, b) =>{
+  //いいね順並び替え(sort引数)
+  const compareLike = (a, b) => {
     var r = 0;
-    if (a.like > b.like){ r = -1 }
-    else if ( a.like < b.like ){ r = 1}
+    if (a.like > b.like) { r = -1 }
+    else if (a.like < b.like) { r = 1 }
     return r
-  } 
-  const compareDate = (a, b) =>{
+  }
+  //日付順並び替え(sort引数)
+  const compareDate = (a, b) => {
     return (formatDate(a.date) < formatDate(b.date) ? 1 : -1)
   }
 
-  const qRes = (V=false) => {
+  //apiデータ受け取り V{true:日付順, false:いいね順}
+  const qRes = (V = false) => {
     fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/question`)
       .then((r) => r.json())
-      .then((d) => setQuestions(d.sort(V ? compareDate : compareLike) ))
+      .then((d) => setQuestions(d.sort(V ? compareDate : compareLike)))
   }
-
-
   React.useEffect(() => {
     qRes(true)
   }, [])
 
+  //toggleButtonの処理
   const handleChange = (event, newAlignment) => {
     if (newAlignment !== null) {
       setAlignment(newAlignment);
@@ -45,6 +46,7 @@ const Home = () => {
     }
   };
 
+  //toggleButtonの表示
   const children = [
     <ToggleButton value="new" key="left" className={styles.tb}>
       <div>新着</div>
@@ -54,6 +56,7 @@ const Home = () => {
     </ToggleButton>,
   ];
 
+  //質問単体の表示
   const Prop = ({ q_id, title, c_name, date, like }) => (
     <div>
       <ul>
@@ -67,13 +70,14 @@ const Home = () => {
     </div>
   );
 
-
+  //質問全体の表示
   const NpProps = ({ q }) => (
     <a>
       {q.map(q => <Prop key={q.id} {...q} />)}
     </a>
   )
 
+  //toggleButtonの設定
   const control = {
     value: alignment,
     onChange: handleChange,
