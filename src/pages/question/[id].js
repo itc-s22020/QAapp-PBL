@@ -101,7 +101,10 @@ const Post = ({user_id, user_name, date, current_user, text, like, deleteAnswer,
                 <Box sx={{width: 50, height: 50, border: '1px black solid', borderRadius: 10}}>
                 </Box>
                 <Box sx={{ml: 1}}>
-                    {user_name} さん<br/>
+                    <Link href={`/profilepage/${user_id}`}>
+                        {user_name}
+                    </Link>
+                    さん<br/>
                     {formatDate(date)}
                 </Box>
                 {/*回答データの場合は削除ボタンを表示する*/}
