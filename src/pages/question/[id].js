@@ -148,11 +148,15 @@ const Post = ({post, current_user, question}) => {
                 </Box>
                 {/*回答データの場合で、回答か質問の投稿者本人の場合は削除ボタンを表示する*/}
                 {isAnswer && (user_id === current_user || current_user === question.user_id)?
-                    <DeleteButton text={text} a_id={id}/>
+                    <DeleteButton text={text} id={id} type={1}/>
                     : <></>
                 }
                 {isAnswer && current_user === question.user_id && a_id !== question.best_a.a_id?
                     <BestAnswerButton text={text} a_id={id} q_id={question.q_id}/>
+                    : <></>
+                }
+                {!isAnswer && current_user === question.user_id ?
+                    <DeleteButton text={text} id={id} type={0}/>
                     : <></>
                 }
             </Box>
@@ -265,20 +269,22 @@ const DisabledLikeButton = () =>
             <IconNotLiked fontSize={"large"} color={"error"}/>
         </IconButton>
     </Link>
-const DeleteButton = ({text, a_id}) => {
+// typeが0なら質問、1なら回答からidで検索して削除するボタン
+const DeleteButton = ({text, id, type}) => {
     const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false)
     const handleDelete = () => {
         handleClose()
-        deleteAnswer(a_id)
+        deletePost(id)
     }
     const router = useRouter()
-    const deleteAnswer = async (a_id) => {
+    const deletePost = async () => {
         const data = {
-            id: a_id
+            id: id
         }
-        await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/answer/delete`, {
+        const postType = type === 0 ? 'question' : 'answer'
+        await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/${postType}/delete`, {
             method: 'post',
             credentials: 'include',
             body: JSON.stringify(data),
@@ -364,7 +370,7 @@ const AnswerPost = ({answer, current_user, question}) => {
 }
 
 const QuestionPost = ({question, current_user}) => {
-    return <Post post={question} current_user={current_user}/>
+    return <Post post={question} current_user={current_user} question={question}/>
 }
 
 const AllAnswers = ({question, current_user, showAllAnswers}) => {
