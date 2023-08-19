@@ -16,7 +16,7 @@ const ProfilePage = ({user_id}) => {
         return <p>Loading</p>
     }
     const {name, age, gender} = data
-    const date = formatDate(data.date)
+    const date = formatDate(data.date_joined)
     return (
         <div className={styles.profile_container}>
             <div className={styles.profile_content}>
