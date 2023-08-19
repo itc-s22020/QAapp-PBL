@@ -10,7 +10,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle, IconButton,
-    TextField
+    TextField, Typography
 } from "@mui/material";
 import styles from "../../styles/Question.module.css"
 import Link from "next/link";
@@ -169,9 +169,9 @@ const UserIcon = ({user_id}) => <Image src={`http://localhost:8080/api/icons/${u
 const LikeButtonBox = ({current_user, initialLikeCount, type, id}) => {
     const [likes, setLikes] = useState(initialLikeCount)
     return (
-        <Box sx={{ml: 2, display: 'flex', alignItems: 'center'}}>
-            <DisplayLikeButton current_user={current_user} type={type} id={id} likes={likes} setLikes={setLikes} />
-            <p>{likes} いいね</p>
+        <Box sx={{display: 'flex',alignItems: 'baseline'}}>
+            <DisplayLikeButton current_user={current_user} type={type} id={id} likes={likes} setLikes={setLikes}/>
+            <Typography variant={"h6"} sx={{alignItems: 'baseline'}}>{likes}</Typography>
         </Box>
     )
 }
