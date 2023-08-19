@@ -109,14 +109,18 @@ const AnswerOrLogin = ({
     if (user) {
         return (
             <>
-                {user}としてログイン中 <button onClick={logout}>ログアウトする</button>
+                <Box className={styles.debug}>
+                    {user}としてログイン中 <button onClick={logout}>ログアウトする</button>
+                </Box>
                 {question.user_id !== user ? <AnswerForm /> : <></>}
             </>
         )
     } else {
         return (
             <>
-                <LoginForm checkLogin={checkLogin}/>
+                <Box className={styles.debug}>
+                    <LoginForm checkLogin={checkLogin}/>
+                </Box>
                 <Box sx={{m: 1}}>
                     <Link href={"/login"}>
                         <Button sx={{width: '100%'}} variant={'contained'} size={"large"}
