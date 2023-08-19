@@ -10,7 +10,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle, IconButton,
-    TextField
+    TextField, Typography
 } from "@mui/material";
 import styles from "../../styles/Question.module.css"
 import Link from "next/link";
@@ -131,7 +131,7 @@ const AnswerOrLogin = ({
         )
     }
 }
-const Post = ({post, current_user}) => {
+const Post = ({post, current_user, question}) => {
     const {user_id, user_name, date, like, a_id, q_id} = post
     const isAnswer = a_id !== undefined
     const [id, type, text] = isAnswer ? [a_id, 'answer', post.a_text] : [q_id, 'question', post.q_text]
@@ -146,9 +146,13 @@ const Post = ({post, current_user}) => {
                     さん<br/>
                     {formatDate(date)}
                 </Box>
-                {/*回答データの場合は削除ボタンを表示する*/}
-                {isAnswer && user_id === current_user ?
+                {/*回答データの場合で、回答か質問の投稿者本人の場合は削除ボタンを表示する*/}
+                {isAnswer && (user_id === current_user || current_user === question.user_id)?
                     <DeleteButton text={text} a_id={id}/>
+                    : <></>
+                }
+                {isAnswer && current_user === question.user_id && a_id !== question.best_a.a_id?
+                    <BestAnswerButton text={text} a_id={id} q_id={question.q_id}/>
                     : <></>
                 }
             </Box>
@@ -169,9 +173,9 @@ const UserIcon = ({user_id}) => <Image src={`http://localhost:8080/api/icons/${u
 const LikeButtonBox = ({current_user, initialLikeCount, type, id}) => {
     const [likes, setLikes] = useState(initialLikeCount)
     return (
-        <Box sx={{ml: 2, display: 'flex', alignItems: 'center'}}>
-            <DisplayLikeButton current_user={current_user} type={type} id={id} likes={likes} setLikes={setLikes} />
-            <p>{likes} いいね</p>
+        <Box sx={{display: 'flex',alignItems: 'center'}}>
+            <DisplayLikeButton current_user={current_user} type={type} id={id} likes={likes} setLikes={setLikes}/>
+            <Typography variant={"h6"}>{likes}</Typography>
         </Box>
     )
 }
@@ -265,7 +269,10 @@ const DeleteButton = ({text, a_id}) => {
     const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false)
-    const handleDelete = () => deleteAnswer(a_id)
+    const handleDelete = () => {
+        handleClose()
+        deleteAnswer(a_id)
+    }
     const router = useRouter()
     const deleteAnswer = async (a_id) => {
         const data = {
@@ -300,8 +307,60 @@ const DeleteButton = ({text, a_id}) => {
     )
 }
 
-const AnswerPost = ({answer, current_user}) => {
-    return <Post post={answer} current_user={current_user}/>
+const BestAnswerButton = ({text, a_id, q_id}) => {
+    const [open, setOpen] = useState(false)
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => setOpen(false)
+    const handleSetBestAnswer = () => {
+        handleClose()
+        setBestAnswer()
+    }
+    const router = useRouter()
+    const setBestAnswer = async () => {
+        const data = {
+            a_id: a_id,
+            q_id: q_id
+        }
+        await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/question/best`, {
+            method: 'post',
+            credentials: 'include',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((r) => {
+                if (r.status === 200) {
+                    return r.json()
+                } else {
+                    return r.json().then((d) => console.log(d))
+                }
+            })
+            .then((d) => {
+                if (!d) return
+                router.reload()
+            })
+    }
+    return (
+        <Box sx={{ml: 1}}>
+            <Button variant={"contained"} color={"warning"}
+                    onClick={handleOpen}>ベストアンサーとして設定</Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>この回答をベストアンサーにしますか？</DialogTitle>
+                <DialogContent>
+                    {text.split('\n').map((s) => <DialogContentText key={s}>{s}</DialogContentText>)}
+                </DialogContent>
+                <DialogActions>
+                    <Button variant={"outlined"} onClick={handleClose}>キャンセル</Button>
+                    <Button variant={"contained"} onClick={handleSetBestAnswer} color={"warning"}>ベストアンサーとして設定する</Button>
+                </DialogActions>
+            </Dialog>
+        </Box>
+    )
+}
+
+const AnswerPost = ({answer, current_user, question}) => {
+    return <Post post={answer} current_user={current_user} question={question}/>
 }
 
 const QuestionPost = ({question, current_user}) => {
@@ -313,12 +372,12 @@ const AllAnswers = ({question, current_user, showAllAnswers}) => {
         return (
             <>
                 <h1 className={styles.textLeft}>ベストアンサー</h1>
-                <Post post={question.best_a} current_user={current_user}/>
+                <Post post={question.best_a} current_user={current_user} question={question}/>
                 {question.answers.length >= 2 ?
                     <>
                         <h1 className={styles.textLeft}>その他の回答 ({question.answers.length - 1}件)</h1>
                         {question.answers.filter((a) => a.a_id !== question.best_a.a_id).slice(0, showAllAnswers ? undefined : 3).map((a, i) =>
-                            <AnswerPost key={i} answer={a} current_user={current_user}/>
+                            <AnswerPost key={i} answer={a} current_user={current_user} question={question}/>
                         )}
                     </> : <></>
                 }
@@ -329,7 +388,7 @@ const AllAnswers = ({question, current_user, showAllAnswers}) => {
             <>
                 <h1 className={styles.textLeft}>回答 ({question.answers.length}件)</h1>
                 {question.answers.slice(0, showAllAnswers ? undefined : 3).map((a, i) =>
-                    <AnswerPost key={i} answer={a} current_user={current_user}/>
+                    <AnswerPost key={i} answer={a} current_user={current_user} question={question}/>
                 )}
             </>
         )
