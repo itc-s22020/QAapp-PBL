@@ -2,6 +2,7 @@ import {Alert, Box, Button, FormControl, InputLabel, MenuItem, Select, TextField
 import {useEffect, useState} from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import {useRouter} from "next/router";
+import RequireLogin from "@/components/RequireLogin";
 
 const PostPage = () => {
     const router = useRouter()
@@ -74,4 +75,6 @@ const PostPage = () => {
     )
 }
 
-export default PostPage
+const Page = () => <RequireLogin CallBackComponent={PostPage}/>
+
+export default Page
