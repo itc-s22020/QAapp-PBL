@@ -283,7 +283,8 @@ const DeleteButton = ({text, id, type}) => {
         const data = {
             id: id
         }
-        const postType = type === 0 ? 'question' : 'answer'
+        const isQuestion = type === 0
+        const postType = isQuestion ? 'question' : 'answer'
         await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/${postType}/delete`, {
             method: 'post',
             credentials: 'include',
@@ -292,7 +293,11 @@ const DeleteButton = ({text, id, type}) => {
                 'Content-Type': 'application/json'
             }
         }).then(() => {
-            router.reload()
+            if (isQuestion) {
+                router.push('/questionDeleted')
+            } else {
+                router.reload()
+            }
         })
     }
     return (
