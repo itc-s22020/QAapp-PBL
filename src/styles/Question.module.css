@@ -41,3 +41,17 @@
 .multiLine {
     margin: 0;
 }
+
+.icon {
+    border: 1px #D1D1E9 solid;
+    border-radius: 48px;
+}
+
+.debug {
+    background-color: #D1D1E9
+}
+
+.debug:before {
+    content: "[debug]\A";
+    white-space: pre;
+}
