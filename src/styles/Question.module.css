@@ -1,12 +1,13 @@
 .page {
     background-color: #F6EEEE;
     color: #2B2C34;
+    padding: 16px;
 }
 
 .container {
-    margin-right: 256px;
-    margin-left: 256px;
-    min-width: 500px;
+    min-width: 300px;
+    max-width: 800px;
+    margin: auto;
     border: 1px #D1D1E9 solid;
     background-color: #FFFFFE;
     text-align: center;
