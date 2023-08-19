@@ -173,9 +173,9 @@ const UserIcon = ({user_id}) => <Image src={`http://localhost:8080/api/icons/${u
 const LikeButtonBox = ({current_user, initialLikeCount, type, id}) => {
     const [likes, setLikes] = useState(initialLikeCount)
     return (
-        <Box sx={{display: 'flex',alignItems: 'baseline'}}>
+        <Box sx={{display: 'flex',alignItems: 'center'}}>
             <DisplayLikeButton current_user={current_user} type={type} id={id} likes={likes} setLikes={setLikes}/>
-            <Typography variant={"h6"} sx={{alignItems: 'baseline'}}>{likes}</Typography>
+            <Typography variant={"h6"}>{likes}</Typography>
         </Box>
     )
 }
