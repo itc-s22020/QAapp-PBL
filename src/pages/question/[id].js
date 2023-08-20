@@ -16,8 +16,8 @@ import styles from "../../styles/Question.module.css"
 import Link from "next/link";
 import IconLiked from '@mui/icons-material/Favorite';
 import IconNotLiked from '@mui/icons-material/FavoriteBorder';
-import Image from "next/image";
 import {formatDate} from "@/lib/formatDate";
+import UserIcon from "@/components/UserIcon";
 
 const AnswerForm = () => {
     const router = useRouter()
@@ -171,8 +171,6 @@ const Post = ({post, current_user, question}) => {
         </div>
     )
 }
-
-const UserIcon = ({user_id}) => <Image src={`http://localhost:8080/api/icons/${user_id}`} alt={user_id} className={styles.icon} width={50} height={50}/>
 
 const LikeButtonBox = ({current_user, initialLikeCount, type, id}) => {
     const [likes, setLikes] = useState(initialLikeCount)
