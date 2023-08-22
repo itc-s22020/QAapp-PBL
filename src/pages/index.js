@@ -82,6 +82,7 @@ const Home = () => {
       {q.map(q => <Prop key={q.id} {...q} />)}
     </>
   )
+}
 
   //toggleButtonの設定
   const control = {
@@ -107,4 +108,5 @@ const Home = () => {
     </>
   );
 }
+
 export default Home
