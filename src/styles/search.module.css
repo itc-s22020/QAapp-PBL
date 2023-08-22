@@ -1,0 +1,44 @@
+.container{
+text-align: center;
+}
+.searchHeading{
+margin-top: 100px;
+}
+.searchcontainer {
+	margin-top: 100px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.searchinput {
+    width: 500px; /* 検索欄の幅を調整 */
+    padding: 15px;
+    font-size: 20px;
+}
+
+.searchbutton {
+    margin-left: 15px;
+    padding: 10px 20px;
+    font-size: 18px;
+}
+.categori {
+    text-align: center;
+    border-bottom: 1px solid;
+    width: 350px;
+    padding-bottom: 30px;
+    margin: 0 auto;
+    font-size: 30px;
+}
+.list {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: 30px;
+}
+
+.left_list,
+.right_list {
+    width: 50%; 
+}
+	
