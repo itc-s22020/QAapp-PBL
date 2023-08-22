@@ -37,9 +37,3 @@
   margin: 0;
 }
 
-.horizontalLine {
-  width: 100%;
-  height: 1px;
-  background-color: #ccc; /* 棒線の色を指定 */
-  margin: 10px 0; /* 上下のマージンを設定 */
-}
