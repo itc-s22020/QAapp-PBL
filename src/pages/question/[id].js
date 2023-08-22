@@ -416,10 +416,9 @@ const AllAnswers = ({question, current_user, showAllAnswers}) => {
 }
 const MultilineText = (s) =>
     s.split('\n').map((line) => <p key={line} className={styles.multiLine}>{line}</p>)
-const Question = () => {
+const Question = ({user, setUser}) => {
     const router = useRouter()
     const [question, setQuestion] = useState()
-    const [user, setUser] = useState()
     const [showAllAnswers, setShowAllAnswers] = useState(false)
     const {id} = router.query
     const checkLogin = () => {

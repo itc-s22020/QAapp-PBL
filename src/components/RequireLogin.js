@@ -5,9 +5,8 @@ import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/post
 // ログインしていない場合、ログインページにリダイレクトさせるためのコンポーネントです。
 // 例えば質問投稿ページでは、質問投稿にはログインが必要なので、ログインしていない場合はリダイレクトされます。
 // pages/post.js のように使用してください。
-const RequireLogin = ({CallBackComponent, redirect = '/'}) => {
+const RequireLogin = ({user, setUser, CallBackComponent, redirect = '/'}) => {
     const router = useRouter()
-    const [user, setUser] = useState('')
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/check`, {
             credentials: "include"

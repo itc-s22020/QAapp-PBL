@@ -5,7 +5,7 @@ import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/post
 import {useRouter} from "next/router";
 
 
-export default function Login(){
+export default function Login({setUser}){
   const router = useRouter()
   const {redirect = '/'} = router.query
   const [selectedOption, setSelectedOption] = useState('');
@@ -42,6 +42,7 @@ export default function Login(){
           }
         }).then((d) => {
           if (!d) return
+          setUser(selectedEmail)
           router.push(redirect)
     })
   }

@@ -11,6 +11,8 @@ import IconLiked from '@mui/icons-material/Favorite';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 
+import Header from '../components/header'
+
 const Home = () => {
   const [alignment, setAlignment] = React.useState('new');
   const [questions, setQuestions] = React.useState([]);
