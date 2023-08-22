@@ -157,7 +157,7 @@ const Post = ({post, current_user, question}) => {
                     <DeleteButton text={text} id={id} type={1}/>
                     : <></>
                 }
-                {isAnswer && current_user === question.user_id && a_id !== question.best_a.a_id?
+                {isAnswer && current_user === question.user_id &&(!question.best_a || a_id !== question.best_a.a_id) ?
                     <BestAnswerButton text={text} a_id={id} q_id={question.q_id}/>
                     : <></>
                 }
