@@ -1,11 +1,7 @@
 .container{
 text-align: center;
 }
-.searchHeading{
-margin-top: 100px;
-}
 .searchcontainer {
-	margin-top: 100px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
