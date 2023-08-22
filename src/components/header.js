@@ -64,6 +64,8 @@ export default function Header({user, setUser}){
 				</>
 				:
 				<>
+					<NewPostButton />
+					<SearchButton />
 					<LoginButton />
 				</>
 			}
