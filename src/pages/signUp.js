@@ -123,6 +123,9 @@ export default function signUp() {
             onChange={handlePasswordconfirmationChange}
 	    required
 	  />
+	  {selectedPassword !== selectedPasswordconfirmation && (
+	    <p className={styles.errorText}>パスワードが一致しません</p>
+	  )}
 	  <p>性別</p>
 	  <div className={styles.to1}>
             <input
@@ -196,6 +199,7 @@ export default function signUp() {
 	  </div>
 	</div>
         <div className={styles.footer}>
+	  <Link href="/login">
             <button
 	      type="submit"
 	      id="button"
@@ -205,6 +209,7 @@ export default function signUp() {
 	    >
 	    新規登録
 	    </button>
+	  </Link>
         </div>
     </div>
  );
