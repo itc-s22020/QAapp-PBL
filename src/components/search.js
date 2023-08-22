@@ -3,7 +3,7 @@ import styles from '../styles/search.module.css';
 import {useRouter} from "next/router";
 import {Box} from "@mui/material";
 
-const SearchField = ({defaultValue = ''}) => {
+const SearchField = ({defaultValue = '', categoryId = ''}) => {
     const [searchQuery, setSearchQuery] = useState(defaultValue);
     const router = useRouter()
 
@@ -12,7 +12,11 @@ const SearchField = ({defaultValue = ''}) => {
     };
 
     const handleSearchSubmit = (event) => {
-        router.push(`/searchResult?q=${searchQuery}`)
+        const params = new URLSearchParams({
+            q: searchQuery,
+            c: categoryId
+        }).toString()
+        router.push(`/searchResult?${params}`)
     };
 
     return (

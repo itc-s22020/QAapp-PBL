@@ -16,7 +16,7 @@ const QuestionSearch = () => {
         <Box sx={{m: 'auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
             {categories.map((c, i) =>
                 <Box key={i} sx={{width: '45%', m: 1}}>
-                    <Link href={`/searchResult=c=${c.id}`}>
+                    <Link href={`/searchResult?c=${c.id}`}>
                         <Typography variant={"h4"}>{c.name}</Typography>
                     </Link>
                 </Box>
