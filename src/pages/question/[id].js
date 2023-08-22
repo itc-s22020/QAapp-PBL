@@ -106,23 +106,29 @@ const AnswerOrLogin = ({
                            question,
                            checkLogin
                        }) => {
+    const router = useRouter()
+    const {id} = router.query
+    const DebugLoginStatus = () =>
+        <Box className={styles.debug}>
+            {user}としてログイン中 <button onClick={logout}>ログアウトする</button>
+        </Box>
+    const DebugLoginForm = () =>
+        <Box className={styles.debug}>
+            <LoginForm checkLogin={checkLogin}/>
+        </Box>
     if (user) {
         return (
             <>
-                <Box className={styles.debug}>
-                    {user}としてログイン中 <button onClick={logout}>ログアウトする</button>
-                </Box>
+                {/*<DebugLoginStatus />*/}
                 {question.user_id !== user ? <AnswerForm /> : <></>}
             </>
         )
     } else {
         return (
             <>
-                <Box className={styles.debug}>
-                    <LoginForm checkLogin={checkLogin}/>
-                </Box>
+                {/*<DebugLoginForm />*/}
                 <Box sx={{m: 1}}>
-                    <Link href={"/login"}>
+                    <Link href={`/login?redirect=/question/${id}`}>
                         <Button sx={{width: '100%'}} variant={'contained'} size={"large"}
                                 color={'success'}>ログインして回答を投稿する</Button>
                     </Link>
@@ -151,7 +157,7 @@ const Post = ({post, current_user, question}) => {
                     <DeleteButton text={text} id={id} type={1}/>
                     : <></>
                 }
-                {isAnswer && current_user === question.user_id && a_id !== question.best_a.a_id?
+                {isAnswer && current_user === question.user_id &&(!question.best_a || a_id !== question.best_a.a_id) ?
                     <BestAnswerButton text={text} a_id={id} q_id={question.q_id}/>
                     : <></>
                 }
@@ -261,12 +267,17 @@ const LikeButton = ({setLiked, setLikes, likes, type, id}) => {
     )
 }
 
-const DisabledLikeButton = () =>
-    <Link href={"/login"}>
-        <IconButton>
-            <IconNotLiked fontSize={"large"} color={"error"}/>
-        </IconButton>
-    </Link>
+const DisabledLikeButton = () => {
+    const router = useRouter()
+    const {id} = router.query
+    return (
+        <Link href={`/login?redirect=/question/${id}`}>
+            <IconButton>
+                <IconNotLiked fontSize={"large"} color={"error"}/>
+            </IconButton>
+        </Link>
+    )
+}
 // typeが0なら質問、1なら回答からidで検索して削除するボタン
 const DeleteButton = ({text, id, type}) => {
     const [open, setOpen] = useState(false)
@@ -446,8 +457,6 @@ const Question = () => {
                                     onClick={() => setShowAllAnswers(true)}>その他の回答を表示する</Button>
                         </Box>
                         : <></>}
-                    {/*<p>{token}</p>*/}
-                    {/*<AnswerOrLogin/>*/}
                     {
                         <AnswerOrLogin user={user} logout={logout} question={question} checkLogin={checkLogin}/>
                     }
