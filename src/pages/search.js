@@ -23,16 +23,21 @@ const QuestionSearch = () => {
             )}
         </Box>
     return (
-        <div className={styles.container}>
-	    <h1>キーワード検索</h1>
-            <div className={styles.searchcontainer}>
-                <SearchField />
-            </div>
-            <h1 className={styles.categori}>カテゴリ</h1>
-            <div className={styles.list}>
-                <CategoryList />
-            </div>
-        </div>
+        <Box sx={{backgroundColor: "#F6EEEE", color: "#2B2C34", p: 2}}>
+            <Box
+                sx={{maxWidth: 800, minWidth: 300, m: "auto", border: "1px #D1D1E9 solid", backgroundColor: "#FFFFFE"}}>
+                <Box sx={{m: 2, textAlign: 'center'}}>
+                    <h1>キーワード検索</h1>
+                    <div className={styles.searchcontainer}>
+                        <SearchField/>
+                    </div>
+                    <h1 className={styles.categori}>カテゴリ</h1>
+                    <div className={styles.list}>
+                        <CategoryList/>
+                    </div>
+                </Box>
+            </Box>
+        </Box>
     );
 }
 
