@@ -165,7 +165,7 @@ const Post = ({post, current_user, question}) => {
             </div>
             <div className={styles.contentBottom}>
                 {/*質問文の場合はカテゴリも表示する*/}
-                {!isAnswer ? <p>{post.c_name}</p> : <p></p>}
+                {!isAnswer ? <Link href={`/searchResult?c=${post.c_id}`}><p>{post.c_name}</p></Link> : <p></p>}
                 <LikeButtonBox current_user={current_user} initialLikeCount={like} type={type} id={id}/>
             </div>
         </div>

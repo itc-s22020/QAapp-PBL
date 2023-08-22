@@ -10,7 +10,7 @@ import Link from "next/link";
 const SearchResultPage = () => {
     const [data, setData] = useState([])
     const router = useRouter()
-    const {q, c} = router.query
+    const {q='', c=''} = router.query
     const search = () => {
         const queryParamData = {
             query: q,
@@ -31,7 +31,7 @@ const SearchResultPage = () => {
                 <Link href={`/question/${d.q_id}`}>
                     <Typography variant={'body1'}>{d.title}</Typography>
                 </Link>
-                <Link href={`/search?c=${d.c_id}`}>
+                <Link href={`/searchResult?c=${d.c_id}`}>
                     <Typography variant={'body1'}>{d.c_name}</Typography>
                 </Link>
                 <Typography variant={'body1'}>{formatDate(d.date)}</Typography>
