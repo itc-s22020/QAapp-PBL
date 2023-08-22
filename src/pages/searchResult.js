@@ -31,12 +31,21 @@ const SearchResultPage = () => {
                 <Link href={`/question/${d.q_id}`}>
                     <Typography variant={'body1'}>{d.title}</Typography>
                 </Link>
-                <Link href={`/searchResult?c=${d.c_id}`}>
-                    <Typography variant={'body1'}>{d.c_name}</Typography>
-                </Link>
-                <Typography variant={'body1'}>{formatDate(d.date)}</Typography>
-                <IconLiked color={'error'} />
-                <Typography variant={'body1'}>{d.like}</Typography>
+                <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+
+                <Box>
+                    <Typography variant={'body1'}>{formatDate(d.date)}</Typography>
+                    <Typography variant={'body1'}>
+                        <Link href={`/searchResult?c=${d.c_id}`}>
+                            {d.c_name}
+                        </Link>
+                    </Typography>
+                </Box>
+                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                    <IconLiked color={'error'} />
+                    <Typography ml={1} variant={'h6'}>{d.like}</Typography>
+                </Box>
+                </Box>
             </Box>
         ))
 
