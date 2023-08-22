@@ -108,21 +108,25 @@ const AnswerOrLogin = ({
                        }) => {
     const router = useRouter()
     const {id} = router.query
+    const DebugLoginStatus = () =>
+        <Box className={styles.debug}>
+            {user}としてログイン中 <button onClick={logout}>ログアウトする</button>
+        </Box>
+    const DebugLoginForm = () =>
+        <Box className={styles.debug}>
+            <LoginForm checkLogin={checkLogin}/>
+        </Box>
     if (user) {
         return (
             <>
-                <Box className={styles.debug}>
-                    {user}としてログイン中 <button onClick={logout}>ログアウトする</button>
-                </Box>
+                {/*<DebugLoginStatus />*/}
                 {question.user_id !== user ? <AnswerForm /> : <></>}
             </>
         )
     } else {
         return (
             <>
-                <Box className={styles.debug}>
-                    <LoginForm checkLogin={checkLogin}/>
-                </Box>
+                {/*<DebugLoginForm />*/}
                 <Box sx={{m: 1}}>
                     <Link href={`/login?redirect=/question/${id}`}>
                         <Button sx={{width: '100%'}} variant={'contained'} size={"large"}
@@ -453,8 +457,6 @@ const Question = () => {
                                     onClick={() => setShowAllAnswers(true)}>その他の回答を表示する</Button>
                         </Box>
                         : <></>}
-                    {/*<p>{token}</p>*/}
-                    {/*<AnswerOrLogin/>*/}
                     {
                         <AnswerOrLogin user={user} logout={logout} question={question} checkLogin={checkLogin}/>
                     }
