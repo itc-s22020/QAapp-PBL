@@ -1,4 +1,4 @@
-/*.container{
+.container{
 }
 
 .h1{
@@ -6,26 +6,49 @@
 }
 
 .content{
-	width: 350px;
+	/*width: 453px;
 	height: 200px;
-	padding: 16px 32px;
+	padding: 12px 32px;*/
+	padding: 12px 32px;
+	margin-left: 150px;
 }
 
 .input1,
 .input2,
 .input3,
 .input4{
-        padding: 7px 80px;
+        padding: 13px;
+	width: 70%;
 }
 
-.button {
-   	padding: 16px 32px;
-  	font-size: 18px;
-  	background-color: #007bff;
- 	color: white;
-  	border: none;
-  	border-radius: 8px;
-	cursor: pointer;
-	margin-top: 45%;
-}*/
+.footer {
+  	margin-top: 10%;
+	text-align: center;
+}
+
+
+.blueButton {
+  background-color: blue;
+  color: white;
+  border: none;
+  padding: 20px 40px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.birthDateContainer {
+	font-size: 17px;
+}
+
+.option1{
+	width: 78%;
+	text-align: center;
+	
+}
+
+.to1{
+	padding: 10px 200px;
+}
 
