@@ -1,0 +1,42 @@
+.h1{
+        text-align: center;
+	margin-top: 20%;
+}
+
+.content{
+        padding: 12px 32px;
+        margin-left: 150px;
+}
+
+.input1{
+	padding: 13px;
+	width: 70%;
+	margin-bottom: 10%;
+}
+.input2{
+        padding: 13px;
+        width: 70%;
+}
+
+.footer {
+        margin-top: 10%;
+        text-align: center;
+}
+
+.p{
+	margin-top: 15%;
+	margin-left: 76%;
+	font-size: 20px;
+}
+
+.blueButton {
+  background-color: blue;
+  color: white;
+  border: none;
+  padding: 20px 40px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
