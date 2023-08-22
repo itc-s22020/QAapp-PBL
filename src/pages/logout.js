@@ -4,11 +4,12 @@ import Link from "next/link";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import {useEffect} from "react";
 
-const LogoutPage = () => {
+const LogoutPage = ({setUser}) => {
     const logout = () => {
         fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/logout`, {
             credentials: "include"
         })
+        setUser(null)
     }
     useEffect(logout, [])
     return (

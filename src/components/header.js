@@ -6,6 +6,8 @@ import logo from '../../public/images/homelogo.png'
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import Image from "next/image";
 import Box from "@mui/material/Box";
@@ -13,8 +15,7 @@ import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/post
 import {useEffect, useState} from "react";
 import Link from "next/link";
 
-export default function Header(){
-	const [user, setUser] = useState('')
+export default function Header({user, setUser}){
 	useEffect(() => {
 		fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/check`, {
 			credentials: "include"
@@ -41,6 +42,14 @@ export default function Header(){
 		<Link href={'/logout'}>
 			<LogoutIcon sx={{ml: 12, transform: 'scale(4.0)', color: '#2B2C34'}}/>
 		</Link>
+	const NewPostButton = () =>
+		<Link href={'/post'}>
+			<PostAddIcon sx={{ml: 12, transform: 'scale(4.0)', color: '#2B2C34'}}/>
+		</Link>
+	const SearchButton = () =>
+		<Link href={'/search'}>
+			<SearchIcon sx={{ml: 12, transform: 'scale(4.0)', color: '#2B2C34'}}/>
+		</Link>
 
 	return (
     	<Box sx={{display: 'flex', alignItems: 'center'}}>
@@ -49,6 +58,8 @@ export default function Header(){
 			{user ?
 				<>
 					<ProfileButton />
+					<NewPostButton />
+					<SearchButton />
 					<LogoutButton />
 				</>
 				:

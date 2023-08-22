@@ -94,7 +94,6 @@ const Home = () => {
 
   return (
     <>
-	  <Header />
       <Box sx={{ backgroundColor: "#F6EEEE", color: "#2B2C34", p: 2 }}>
         <Box sx={{ maxWidth: 800, minWidth: 300, m: "auto", border: "1px #D1D1E9 solid", backgroundColor: "#FFFFFE" }}>
           <Box sx={{ m: 2 }}>
