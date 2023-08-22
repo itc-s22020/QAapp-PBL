@@ -8,7 +8,6 @@ import { formatDate } from '@/lib/formatDate';
 import Link from 'next/link';
 import IconLiked from '@mui/icons-material/Favorite';
 
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 
@@ -108,4 +107,5 @@ const Home = () => {
     </>
   );
 }
+
 export default Home
