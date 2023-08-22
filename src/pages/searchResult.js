@@ -72,6 +72,7 @@ const SearchResultPage = () => {
                             <CategorySelect/>
                         </FormControl>
                     </Box>
+                    <Typography m={2} variant={'h4'}>検索結果：{data.length}件</Typography>
                     <SearchResult />
                 </Box>
             </Box>
