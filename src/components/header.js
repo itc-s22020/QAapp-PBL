@@ -1,34 +1,21 @@
 // import Image from 'next/image'
-import logo from '../images/homelogo.png'
+import logo from '../../public/images/homelogo.png'
 // import rank from '../images/ranklogo.png'
 // import profile from '../images/prologo.png'
 // import logout from '../images/lgout.png'
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
-import axios from "axios"
-import "../styles/header.css";
+import Image from "next/image";
+import Box from "@mui/material/Box";
 
 export default function Header(){
-	const handleLogout = async(e) => {
-     		e.preventDefault()
-		try {
-			const loginCheck = await axios.get(`${API_HOST}/api/user/login`,{withCredentials:true})
-			if (loginCheck.status !== 200){
-				return
-			}
-			await axios.get(`{API_HOST}/api/user/logout`,{
-				withCredentials:true
-			})
-		}catch(e){
-			console.log(e)
-		}
-	}
 	return (
-    	<div className='wrap'>
-		<LeaderboardIcon className='icon' />
-        	<PersonIcon className='icon' />
-        	<LogoutIcon className='icon' />
-    	</div>
+    	<Box sx={{display: 'flex', alignItems: 'center'}}>
+			<Image src={"/images/homelogo.png"} width={396 / 1.5} height={155 / 1.5} alt={'logo'}/>
+			<LeaderboardIcon sx={{ml: 8, transform: 'scale(4.0)', color: '#2B2C34'}}/>
+        	<PersonIcon sx={{ml: 12, transform: 'scale(4.0)', color: '#2B2C34'}}/>
+        	<LogoutIcon sx={{ml: 12, transform: 'scale(4.0)', color: '#2B2C34'}}/>
+    	</Box>
   	)
 }
