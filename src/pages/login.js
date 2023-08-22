@@ -7,6 +7,7 @@ import {useRouter} from "next/router";
 
 export default function Login(){
   const router = useRouter()
+  const {redirect = '/'} = router.query
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
   const [selectedPassword, setSelectedPassword] = useState('');
@@ -41,7 +42,7 @@ export default function Login(){
           }
         }).then((d) => {
           if (!d) return
-          router.push('/')
+          router.push(redirect)
     })
   }
 
