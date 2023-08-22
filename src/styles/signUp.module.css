@@ -1,59 +1,81 @@
-.container{
+.container {
 }
 
-.h1{
-	text-align: center;
+.h1 {
+  text-align: center;
 }
 
-.content{
-	/*width: 453px;
-	height: 200px;
-	padding: 12px 32px;*/
-	padding: 12px 32px;
-	margin-left: 150px;
+.content {
+  padding: 12px;
+  margin: 0 auto;
 }
 
 .input1,
 .input2,
 .input3,
-.input4{
-        padding: 13px;
-	width: 70%;
+.input4 {
+  padding: 10px;
+  width: 100%;
 }
 
 .footer {
-  	margin-top: 10%;
-	text-align: center;
+  margin-top: 5%;
+  text-align: center;
 }
-
 
 .blueButton {
   background-color: blue;
   color: white;
   border: none;
-  padding: 20px 40px;
+  padding: 15px 50px;
   cursor: pointer;
-  border: none;
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 24px;
 }
 
 .birthDateContainer {
-	font-size: 17px;
+  font-size: 14px;
+  margin: 0 auto;
 }
 
-.option1{
-	width: 78%;
-	text-align: center;
-	
+.option1 {
+  width: 100%;
+  text-align: center;
 }
 
-.to1{
-	padding: 10px 200px;
+.to1 {
+  padding: 10px;
+  text-align: center;
 }
 
 .errorText {
   color: red;
-  font-size: 14px;
+  font-size: 12px;
   margin-top: 5px;
 }
+
+/* Adjustments for different screen sizes */
+@media (min-width: 800px) {
+  .content {
+    padding: 12px 32px;
+    margin: 0 auto;
+    max-width: 800px;
+  }
+
+  .input1,
+  .input2,
+  .input3,
+  .input4 {
+    width: 100%;
+  }
+
+  .to1 {
+    padding: 10px;
+  }
+
+  .blueButton {
+    padding: 20px 70px;
+    font-size: 30px;
+  }
+}
+
