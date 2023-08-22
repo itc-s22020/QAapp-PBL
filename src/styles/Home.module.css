@@ -1,3 +1,31 @@
+.frame {
+    background-color: #1fffff;
+    color: #2B2C34;
+    margin-top: 0px;
+    min-width: 500px;
+    margin-left: 256px;
+    margin-right: 256px;
+    border: 1px #D1D1E9 solid;
+}
+.title {
+    color: #2B2C34;
+    font-weight: bold;
+    font-size: 30px;
+    text-decoration: none;
+}
+.title :hover {
+        color: #6246EA;
+}
+
+.cName {
+    font-size: 22px;
+    margin-right: 5px;
+}
+
+.date {
+    font-size: 22px;
+}
+
 .tb {
-    width: 255px;
+    width: 20em;
 }

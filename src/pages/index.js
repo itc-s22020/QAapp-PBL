@@ -6,6 +6,14 @@ import styles from '@/styles/Home.module.css'
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import { formatDate } from '@/lib/formatDate';
 import Link from 'next/link';
+import IconLiked from '@mui/icons-material/Favorite';
+
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 
 const Home = () => {
@@ -39,11 +47,8 @@ const Home = () => {
     if (newAlignment !== null) {
       setAlignment(newAlignment);
     }
-    if (newAlignment === "new") {
-      qRes(true)
-    } else {
-      qRes(false)
-    }
+    if (newAlignment === "new") { qRes(true) }
+    else { qRes(false) }
   };
 
   //toggleButtonの表示
@@ -56,25 +61,56 @@ const Home = () => {
     </ToggleButton>,
   ];
 
+
+  const Cards = ({ q_id, title, c_name, date, like }) => (
+    <div>
+      <React.Fragment>
+        <CardContent>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            Word of the Day
+          </Typography>
+          <Typography variant="h5" component="div">
+            <div>test</div>
+          </Typography>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            adjective
+          </Typography>
+          <Typography variant="body2">
+            well meaning and kindly.
+            <br />
+            {'"a benevolent smile"'}
+          </Typography>
+        </CardContent>
+      </React.Fragment>
+    </div>
+  );
+
+
   //質問単体の表示
   const Prop = ({ q_id, title, c_name, date, like }) => (
-    <div>
-      <ul>
-        <Link href={`/question/${q_id}`}>
-          <li>title: {title}</li>
+    <Card sx={{ mt: 2, mb: 2 }} variant="outlined">
+      <Box sx={{ m: 4 }}>
+        <Link href={`/question/${q_id}`} className={styles.title} >
+          <div >{title}</div>
         </Link>
-        <li>c_name: {c_name}</li>
-        <li>date: {formatDate(date)}</li>
-        <li>like: {like}</li>
-      </ul>
-    </div>
+        <Box sx={{ mt: 1, display: 'flex', justifyContent: 'space-between' }}>
+          <div>
+            <span className={styles.cName}>{c_name}</span>
+            <span className={styles.date}>{formatDate(date)}</span>
+          </div>
+          <Box sx={{ display: 'flex', alignItems: 'center', fontSize:24 }}>
+              <IconLiked color='error' sx={{ width: 30, height: 30 }} />{like}
+          </Box>
+        </Box>
+      </Box>
+    </Card>
   );
 
   //質問全体の表示
   const NpProps = ({ q }) => (
-    <a>
+    <>
       {q.map(q => <Prop key={q.id} {...q} />)}
-    </a>
+    </>
   )
 
   //toggleButtonの設定
@@ -86,14 +122,18 @@ const Home = () => {
 
   return (
     <>
-      <Stack spacing={2} alignItems="center">
-        <ToggleButtonGroup size="large" {...control} aria-label="Large sizes">
-          {children}
-        </ToggleButtonGroup>
-      </Stack>
-      <div>
-        <NpProps q={questions} />
-      </div>
+      <Box sx={{ backgroundColor: "#F6EEEE", color: "#2B2C34", p: 2 }}>
+        <Box sx={{ maxWidth: 800, minWidth: 300, m: "auto", border: "1px #D1D1E9 solid", backgroundColor: "#FFFFFE" }}>
+          <Box sx={{ m: 2 }}>
+            <Stack spacing={2} alignItems="center" sx={{ mt: 5, mb: 5 }}>
+              <ToggleButtonGroup size="large" {...control} aria-label="Large sizes">
+                {children}
+              </ToggleButtonGroup>
+            </Stack>
+            <NpProps q={questions} />
+          </Box>
+        </Box>
+      </Box >
     </>
   );
 }
