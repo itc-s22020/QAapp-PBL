@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styles from '../styles/signUp.module.css'
 import { useState } from 'react';
+import axios from "axios"
 
 export default function signUp() {
   const [selectedOption, setSelectedOption] = useState('');
@@ -12,6 +13,12 @@ export default function signUp() {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
+
+/*  fetch(`${API_HOST}/api/user/check`, {credentials: 'include'})
+    .then((r) => r.json())
+    .then((d) => {
+        console.log(`${d.user}としてログインしています`)
+    })*/
 
   const StartYear = 1970;
   const endYear = 2023;
@@ -61,6 +68,21 @@ export default function signUp() {
     setSelectedGender(e.target.value);
   };
 
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+    if (selectedPassword !== selectedPasswordconfirmation){
+	    return
+    }
+/*    try {
+      const response = await axios.post(`${API_HOST}/api/user/login`,{
+	      password:selectedPassword,
+	      name:selectedName,
+	      mail:selectedMail,
+	      gender:selectedGender,
+      })
+    }catch(e){
+    }*/
+  }
   return (
     <div className={styles.container}>
       <h1 className={styles.h1}>新規登録ページ</h1>
@@ -101,10 +123,13 @@ export default function signUp() {
             onChange={handlePasswordconfirmationChange}
 	    required
 	  />
+	  {selectedPassword !== selectedPasswordconfirmation && (
+	    <p className={styles.errorText}>パスワードが一致しません</p>
+	  )}
 	  <p>性別</p>
-	  <div className="form-check form-check-inline">
+	  <div className={styles.to1}>
             <input
-	      className="form-check-input"
+	      className={styles.button}
 	      type="radio"
 	      name="inlineRadioOptions"
 	      id="inlineRadio1"
@@ -113,84 +138,78 @@ export default function signUp() {
 	      onChange={handleGenderChange}
 	    />
             <label
-	      className="form-check-label"
+	      className={styles.label1}
 	      htmlFor="inlineRadio1">男性
 	    </label>
-	  </div>
-
-	  <div className="form-check form-check-inline">
+              <input
+                className={styles.button}
+                type="radio"
+                name="inlineRadioOptions"
+                id="inlineRadio2"
+                value="女性"
+                required
+                onChange={handleGenderChange}
+              />
+              <label
+              className={styles.lavel2}
+              htmlFor="inlineRadio2">女性
+              </label>
             <input
-	    className="form-check-input"
-	    type="radio"
-	    name="inlineRadioOptions"
-	    id="inlineRadio2" 
-	    value="女性"
-	    required
-	    onChange={handleGenderChange}
-	  />
+              className={styles.button}
+              type="radio"
+              name="inlineRadioOptions"
+              id="inlineRadio3"
+              value="無回答"
+              required
+              onChange={handleGenderChange}
+            />
             <label
-	    className="form-check-label"
-	    htmlFor="inlineRadio2">女性
-	    </label>
-          </div>
-	  <div className="form-check form-check-inline">
-            <input 
-	      className="form-check-input"
-	      type="radio"
-	      name="inlineRadioOptions"
-	      id="inlineRadio3"
-	      value="無回答"
-	      required
-	      onChange={handleGenderChange}
-	    />
-            <label
-	      className="form-check-label"
-	      htmlFor="inlineRadio3">無回答
-	    </label>
+              className={styles.lavel3}
+              htmlFor="inlineRadio3">無回答
+            </label>
 	  </div>
-	  <p>生年月日</p>
-	  <div>
-	    <select value={selectedYear} onChange={handleYearChange}>
-	      <option value="">年</option>
-	      {years.map((year) => (
-		<option key={year} value={year}>
-	          {year}年
-	        </option>
-	      ))}
-	    </select>
-	  </div>
-	  <div>
-            <select value={selectedMonth} onChange={handleMonthChange}>
-	      <option value="">月</option>
-	      {months.map((month, index) => (
-		<option key={index} value={month}>
-		  {month}
-		</option>
-	       ))}
-	    </select>
-	  </div>
-	  <div>
-	    <select value={selectedDay} onChange={handleDayChange}>
-	      <option value="">日</option>
-	      {days.map((day, index) => (
-		<option key={index} value={day}>
-		  {day}日
-		</option>
-	       ))}
-	     </select>
+	  <div className={`${styles.birthDateContainer}`}>
+	    <p>生年月日</p>
+	    <div className={`${styles.option1}`}>
+	      <select value={selectedYear} onChange={handleYearChange}>
+	        <option value="">年</option>
+	        {years.map((year) => (
+		  <option key={year} value={year}>
+	            {year}年
+	          </option>
+	        ))}
+	      </select>
+              <select value={selectedMonth} onChange={handleMonthChange}>
+                <option value="">月</option>
+                {months.map((month, index) => (
+                  <option key={index} value={month}>
+                    {month}
+                  </option>
+                 ))}
+              </select>
+              <select value={selectedDay} onChange={handleDayChange}>
+                <option value="">日</option>
+                {days.map((day, index) => (
+                  <option key={index} value={day}>
+                    {day}日
+                  </option>
+                 ))}
+               </select>
+	    </div>
 	  </div>
 	</div>
         <div className={styles.footer}>
-          <Link href="/login">
+	  <Link href="/login">
             <button
 	      type="submit"
 	      id="button"
 	      className={styles.blueButton}
-	      disabled={!selectedName || !selectedGender || !selectedYear || !selectedMonth || !selectedDay} 
+	      disabled={!selectedName || !selectedGender || !selectedYear || !selectedMonth || !selectedDay}
+	      onClick={handleSubmit}
 	    >
 	    新規登録
 	    </button>
-          </Link>
+	  </Link>
         </div>
     </div>
  );
