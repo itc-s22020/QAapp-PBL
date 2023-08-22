@@ -11,6 +11,8 @@ import IconLiked from '@mui/icons-material/Favorite';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 
+import Header from '../components/header'
+
 const Home = () => {
   const [alignment, setAlignment] = React.useState('new');
   const [questions, setQuestions] = React.useState([]);
@@ -92,6 +94,7 @@ const Home = () => {
 
   return (
     <>
+	  <Header />
       <Box sx={{ backgroundColor: "#F6EEEE", color: "#2B2C34", p: 2 }}>
         <Box sx={{ maxWidth: 800, minWidth: 300, m: "auto", border: "1px #D1D1E9 solid", backgroundColor: "#FFFFFE" }}>
           <Box sx={{ m: 2 }}>
