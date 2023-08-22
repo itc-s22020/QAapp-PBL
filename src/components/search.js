@@ -1,30 +1,32 @@
 import React, { useState } from 'react';
 import styles from '../styles/search.module.css';
+import {useRouter} from "next/router";
+import {Box} from "@mui/material";
 
-const SearchField = () => {
-    const [searchQuery, setSearchQuery] = useState('');
+const SearchField = ({defaultValue = ''}) => {
+    const [searchQuery, setSearchQuery] = useState(defaultValue);
+    const router = useRouter()
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
 
     const handleSearchSubmit = (event) => {
-        event.preventDefault();
-        // 検索処理を実行するロジックを追加
+        router.push(`/searchResult?q=${searchQuery}`)
     };
 
     return (
         <div className={`${styles.searchcontainer} ${styles.centered}`}>
-            <form onSubmit={handleSearchSubmit}>
+            <Box sx={{display: 'flex'}}>
                 <input
                     type="text"
                     placeholder="検索したいカテゴリを入力"
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    className={styles.searchinput} 
+                    className={styles.searchinput}
                 />
-                <button type="submit" className={styles.searchbutton}>検索</button>
-            </form>
+                <button type="submit" className={styles.searchbutton} onClick={handleSearchSubmit}>検索</button>
+            </Box>
         </div>
     );
 }

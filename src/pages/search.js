@@ -5,7 +5,7 @@ import styles from '../styles/search.module.css';
 const QuestionSearch = () => {
     return (
         <div className={styles.container}>
-	    <h1 className={styles.searchHeading}>キーワード検索</h1>
+	    <h1>キーワード検索</h1>
             <div className={styles.searchcontainer}>
                 <SearchField />
             </div>
