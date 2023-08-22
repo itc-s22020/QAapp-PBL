@@ -1,11 +1,13 @@
 import React from 'react';
 import ProfilePage from '../components/ProfilePage';
+import AnswerProfile from '../components/answer_profile';
+import Styles from '../styles/profile.module.css';
 
 const Profile = () => {
-  const name = "中山で〜〜す！"	
   return (
-    <div>
+    <div className={Styles.container}>
       <ProfilePage />
+      <AnswerProfile />	  
     </div>
   );
 };
