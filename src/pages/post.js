@@ -77,6 +77,6 @@ const PostPage = () => {
     )
 }
 
-const Page = () => <RequireLogin CallBackComponent={PostPage}/>
+const Page = () => <RequireLogin CallBackComponent={PostPage} redirect={'/post'}/>
 
 export default Page

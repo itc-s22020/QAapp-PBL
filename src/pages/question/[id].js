@@ -106,6 +106,8 @@ const AnswerOrLogin = ({
                            question,
                            checkLogin
                        }) => {
+    const router = useRouter()
+    const {id} = router.query
     if (user) {
         return (
             <>
@@ -122,7 +124,7 @@ const AnswerOrLogin = ({
                     <LoginForm checkLogin={checkLogin}/>
                 </Box>
                 <Box sx={{m: 1}}>
-                    <Link href={"/login"}>
+                    <Link href={`/login?redirect=/question/${id}`}>
                         <Button sx={{width: '100%'}} variant={'contained'} size={"large"}
                                 color={'success'}>ログインして回答を投稿する</Button>
                     </Link>
@@ -261,12 +263,17 @@ const LikeButton = ({setLiked, setLikes, likes, type, id}) => {
     )
 }
 
-const DisabledLikeButton = () =>
-    <Link href={"/login"}>
-        <IconButton>
-            <IconNotLiked fontSize={"large"} color={"error"}/>
-        </IconButton>
-    </Link>
+const DisabledLikeButton = () => {
+    const router = useRouter()
+    const {id} = router.query
+    return (
+        <Link href={`/login?redirect=/question/${id}`}>
+            <IconButton>
+                <IconNotLiked fontSize={"large"} color={"error"}/>
+            </IconButton>
+        </Link>
+    )
+}
 // typeが0なら質問、1なら回答からidで検索して削除するボタン
 const DeleteButton = ({text, id, type}) => {
     const [open, setOpen] = useState(false)
