@@ -196,7 +196,6 @@ export default function signUp() {
 	      id="button"
 	      className={styles.blueButton}
 	      disabled={!selectedEmail || !selectedName || !selectedPassword  || !selectedGender || !selectedYear || !selectedMonth || !selectedDay}
-	      onClick={handleSubmit}
 	    >
 	    新規登録
 	    </button>
