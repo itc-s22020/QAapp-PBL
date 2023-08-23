@@ -80,8 +80,8 @@ export default function Login({setUser}){
               onClick={handleLogin}
           >
             ログイン
-          </button>
-	  <Link href="/signup">
+            </button>
+	  <Link href="/signUp">
 	    <div className={styles.p}>
 	      <p>新規の方はこちら→</p>
 	    </div>
