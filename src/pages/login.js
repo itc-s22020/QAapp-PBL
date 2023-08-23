@@ -50,7 +50,7 @@ export default function Login(){
             ログイン
             </button>
           </Link>
-	  <Link href="/signup">
+	  <Link href="/signUp">
 	    <div className={styles.p}>
 	      <p>新規の方はこちら→</p>
 	    </div>
