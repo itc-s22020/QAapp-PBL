@@ -1,74 +1,83 @@
-// import Image from 'next/image'
-import logo from '../../public/images/homelogo.png'
-// import rank from '../images/ranklogo.png'
-// import profile from '../images/prologo.png'
-// import logout from '../images/lgout.png'
+import Image from 'next/image'
+import Link from 'next/link'
+import logo from '../images/homelogo.png'
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import LogoutIcon from '@mui/icons-material/Logout';
-import LoginIcon from '@mui/icons-material/Login';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
-import Image from "next/image";
-import Box from "@mui/material/Box";
+import TelegramIcon from '@mui/icons-material/Telegram';
+import styles from "@/styles/header.module.css";
+import LoginIcon from '@mui/icons-material/Login';
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
-import {useEffect, useState} from "react";
-import Link from "next/link";
 
-export default function Header({user, setUser}){
+export default function Header() {
+	const router = useRouter()
+	const [check, setCheck] = useState('')
 	useEffect(() => {
 		fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/check`, {
 			credentials: "include"
-		}).then((r) => r.json())
-			.then((d) => setUser(d.user))
-	}, [setUser])
-	const Logo = () =>
-		<Link href={'/'}>
-			<Image src={"/images/homelogo.png"} width={396 / 1.5} height={155 / 1.5} alt={'logo'}/>
-		</Link>
-	const RankingButton = () =>
-		<Link href={'/ranking'}>
-			<LeaderboardIcon sx={{ml: 8, transform: 'scale(4.0)', color: '#2B2C34'}}/>
-		</Link>
-	const LoginButton = () =>
-		<Link href={'/login'}>
-			<LoginIcon sx={{ml: 12, transform: 'scale(4.0)', color: '#2B2C34'}}/>
-		</Link>
-	const ProfileButton = () =>
-		<Link href={`/profilepage/${user}`}>
-			<PersonIcon sx={{ml: 12, transform: 'scale(4.0)', color: '#2B2C34'}}/>
-		</Link>
-	const LogoutButton = () =>
-		<Link href={'/logout'}>
-			<LogoutIcon sx={{ml: 12, transform: 'scale(4.0)', color: '#2B2C34'}}/>
-		</Link>
-	const NewPostButton = () =>
-		<Link href={'/post'}>
-			<PostAddIcon sx={{ml: 12, transform: 'scale(4.0)', color: '#2B2C34'}}/>
-		</Link>
-	const SearchButton = () =>
-		<Link href={'/search'}>
-			<SearchIcon sx={{ml: 12, transform: 'scale(4.0)', color: '#2B2C34'}}/>
-		</Link>
+		}).then((r) => {
+			console.log(r.status)
+			setCheck(r.status === "200" ? true : false)
+			console.log(check)
+		})
+	}, [])
+
+	const ranking = () => {
+		router.replace('/ranking')
+	}
+	const postPage = () => {
+		router.replace('/post')
+	}
+	const ProfilePage = () => {
+		router.replace('/ProfilePage')
+	}
+	const login = () => {
+		router.replace('/login')
+	}
+	const logout = () => {
+		fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/logout`, {
+			credentials: "include"
+		})
+			.then(r => console.log(r))
+	}
 
 	return (
-    	<Box sx={{display: 'flex', alignItems: 'center'}}>
-			<Logo />
-			<RankingButton />
-			{user ?
-				<>
-					<ProfileButton />
-					<NewPostButton />
-					<SearchButton />
-					<LogoutButton />
-				</>
-				:
-				<>
-					<NewPostButton />
-					<SearchButton />
-					<LoginButton />
-				</>
+		<div>
+			<Link href={'/'} className={styles.wrap}>
+				< Image
+					src={logo}
+					alt='logo'
+					width={300}
+					height={100}
+
+
+				/>
+			</Link>
+			<IconButton onClick={ranking} >
+				<LeaderboardIcon className={styles.icon} />
+			</IconButton>
+			{
+				check ?
+					<IconButton onClick={postPage}>
+						<TelegramIcon className={styles.icon} />
+					</IconButton> : ""
 			}
-    	</Box>
-  	)
-}
+			{
+				check ?
+					<IconButton onClick={ProfilePage}>
+						<PersonIcon className={styles.icon} />
+					</IconButton> : ""
+			}
+			{
+				check ? <LogoutIcon className={styles.icon} onClick={logout} /> :
+					<IconButton onClick={login}>
+						<LoginIcon className={styles.icon} />
+					</IconButton>
+			}
+		</div >
+	)
+} 
