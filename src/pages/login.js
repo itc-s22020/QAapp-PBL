@@ -1,12 +1,17 @@
 import Link from 'next/link';
 import styles from '../styles/login.module.css';
 import { useState } from 'react';
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+import {useRouter} from "next/router";
 
 
-export default function Login(){
+export default function Login({setUser}){
+  const router = useRouter()
+  const {redirect = '/'} = router.query
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
   const [selectedPassword, setSelectedPassword] = useState('');
+  const [error, setError] = useState('')
 
   const handleEmailChange = (e) => {
     setSelectedEmail(e.target.value);
@@ -16,11 +21,38 @@ export default function Login(){
     setSelectedPassword(e.target.value);
   };
 
+  const handleLogin = () => {
+    const data = {
+      user_id: selectedEmail,
+      password: selectedPassword
+    }
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/login`, {
+      method: 'post',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    })
+        .then((r) => {
+          if (r.status === 200) {
+            return r.json()
+          } else {
+            r.json().then((d) => setError(d.message))
+          }
+        }).then((d) => {
+          if (!d) return
+          setUser(selectedEmail)
+          router.push(redirect)
+    })
+  }
+
   return (
     <div className={styles.container}>
       <h1 className={styles.h1}>ログイン</h1>
         <div className={styles.content}>
-          <p>メールアドレス</p>
+          <p className={styles.error}>{error}</p>
+          <p>ユーザーID</p>
           <input
             className={styles.input1}
             type="e-mail"
@@ -40,17 +72,16 @@ export default function Login(){
           />
 	</div>
         <div className={styles.footer}>
-          <Link href="/login">
-            <button
+          <button
               type="submit"
               id="button"
               className={styles.blueButton}
               disabled={!selectedEmail || !selectedPassword}
-            >
+              onClick={handleLogin}
+          >
             ログイン
             </button>
-          </Link>
-	  <Link href="/signup">
+	  <Link href="/signUp">
 	    <div className={styles.p}>
 	      <p>新規の方はこちら→</p>
 	    </div>
@@ -59,4 +90,3 @@ export default function Login(){
     </div>
   )
 }
-

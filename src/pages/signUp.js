@@ -73,19 +73,10 @@ export default function signUp() {
     if (selectedPassword !== selectedPasswordconfirmation){
 	    return
     }
-/*    try {
-      const response = await axios.post(`${API_HOST}/api/user/login`,{
-	      password:selectedPassword,
-	      name:selectedName,
-	      mail:selectedMail,
-	      gender:selectedGender,
-      })
-    }catch(e){
-    }*/
   }
   return (
     <div className={styles.container}>
-      <h1 className={styles.h1}>新規登録ページ</h1>
+      <h1 className={styles.h1}>新規登録</h1>
 	<div className={styles.content}>
           <p>メールアドレス</p>
 	  <input
@@ -114,7 +105,7 @@ export default function signUp() {
 	    onChange={handlePasswordChange}
 	    required
 	  />
-          <p>パスワード確認</p>
+          <p className={styles.confirmation}>パスワード確認</p>
 	  <input
 	    className={styles.input4}
 	    type="password"
@@ -204,7 +195,7 @@ export default function signUp() {
 	      type="submit"
 	      id="button"
 	      className={styles.blueButton}
-	      disabled={!selectedName || !selectedGender || !selectedYear || !selectedMonth || !selectedDay}
+	      disabled={!selectedEmail || !selectedName || !selectedPassword || !selectedPasswordconfirmation || !selectedGender || !selectedYear || !selectedMonth || !selectedDay}
 	      onClick={handleSubmit}
 	    >
 	    新規登録

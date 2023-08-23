@@ -1,0 +1,6 @@
+.container {
+  display: flex;
+  justify-content: space-between; /* 要素間のスペースを均等に分配 */
+  align-items: center; /* 要素を垂直方向に中央揃え */
+}
+
