@@ -70,8 +70,8 @@ const Home = () => {
             <span className={styles.cName}>{c_name}</span>
             <span className={styles.date}>{formatDate(date)}</span>
           </div>
-          <Box sx={{ display: 'flex', alignItems: 'center', fontSize:24 }}>
-              <IconLiked color='error' sx={{ width: 30, height: 30 }} />{like}
+          <Box sx={{ display: 'flex', alignItems: 'center', fontSize: 24 }}>
+            <IconLiked color='error' sx={{ width: 30, height: 30 }} />{like}
           </Box>
         </Box>
       </Box>
@@ -94,8 +94,7 @@ const Home = () => {
 
   return (
     <>
-	  <Header />
-      <main>topPage</main>
+      <Header />
       <Box sx={{ backgroundColor: "#F6EEEE", color: "#2B2C34", p: 2 }}>
         <Box sx={{ maxWidth: 800, minWidth: 300, m: "auto", border: "1px #D1D1E9 solid", backgroundColor: "#FFFFFE" }}>
           <Box sx={{ m: 2 }}>
