@@ -190,13 +190,12 @@ export default function signUp() {
 	  </div>
 	</div>
         <div className={styles.footer}>
-	  <Link href="/login">
+	  <Link href="/Login">
             <button
 	      type="submit"
 	      id="button"
 	      className={styles.blueButton}
-	      disabled={!selectedEmail || !selectedName || !selectedPassword || !selectedPasswordconfirmation || !selectedGender || !selectedYear || !selectedMonth || !selectedDay}
-	      onClick={handleSubmit}
+	      disabled={!selectedEmail || !selectedName || !selectedPassword  || !selectedGender || !selectedYear || !selectedMonth || !selectedDay}
 	    >
 	    新規登録
 	    </button>
