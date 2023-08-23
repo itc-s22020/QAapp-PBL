@@ -4,7 +4,7 @@ import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/post
 import {useRouter} from "next/router";
 import RequireLogin from "@/components/RequireLogin";
 
-const PostPage = () => {
+const PostPage = ({user, setUser}) => {
     const router = useRouter()
     const [title, setTitle] = useState('')
     const [categoryId, setCategoryId] = useState('')
@@ -77,6 +77,6 @@ const PostPage = () => {
     )
 }
 
-const Page = () => <RequireLogin CallBackComponent={PostPage}/>
+const Page = ({user, setUser}) => <RequireLogin user={user} setUser={setUser} CallBackComponent={PostPage} redirect={'/post'}/>
 
 export default Page
