@@ -13,17 +13,13 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
-export default function Header() {
+export default function Header({user, setUser}) {
 	const router = useRouter()
-	const [check, setCheck] = useState('')
 	useEffect(() => {
 		fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/check`, {
 			credentials: "include"
-		}).then((r) => {
-			console.log(r.status)
-			setCheck(r.status === "200" ? true : false)
-			console.log(check)
-		})
+		}).then((r) => r.json())
+			.then((d) => setUser(d.user))
 	}, [])
 
 	const ranking = () => {
@@ -33,16 +29,13 @@ export default function Header() {
 		router.replace('/post')
 	}
 	const ProfilePage = () => {
-		router.replace('/ProfilePage')
+		router.replace(`/profilepage/${user}`)
 	}
 	const login = () => {
 		router.replace('/login')
 	}
 	const logout = () => {
-		fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/logout`, {
-			credentials: "include"
-		})
-			.then(r => console.log(r))
+		router.push('/logout')
 	}
 
 	return (
@@ -61,19 +54,19 @@ export default function Header() {
 				<LeaderboardIcon className={styles.icon} />
 			</IconButton>
 			{
-				check ?
+				user ?
 					<IconButton onClick={postPage}>
 						<TelegramIcon className={styles.icon} />
 					</IconButton> : ""
 			}
 			{
-				check ?
+				user ?
 					<IconButton onClick={ProfilePage}>
 						<PersonIcon className={styles.icon} />
 					</IconButton> : ""
 			}
 			{
-				check ? <LogoutIcon className={styles.icon} onClick={logout} /> :
+				user ? <LogoutIcon className={styles.icon} onClick={logout} /> :
 					<IconButton onClick={login}>
 						<LoginIcon className={styles.icon} />
 					</IconButton>
