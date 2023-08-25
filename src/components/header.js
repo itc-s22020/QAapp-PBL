@@ -2,7 +2,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import logo from '../images/homelogo.png'
 import IconButton from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
@@ -10,20 +9,17 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import styles from "@/styles/header.module.css";
 import LoginIcon from '@mui/icons-material/Login';
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+import Box from "@mui/material/Box";
 
-export default function Header() {
+export default function Header({user, setUser}) {
 	const router = useRouter()
-	const [check, setCheck] = useState('')
 	useEffect(() => {
 		fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/check`, {
 			credentials: "include"
-		}).then((r) => {
-			console.log(r.status)
-			setCheck(r.status === "200" ? true : false)
-			console.log(check)
-		})
+		}).then((r) => r.json())
+			.then((d) => setUser(d.user))
 	}, [])
 
 	const ranking = () => {
@@ -33,20 +29,17 @@ export default function Header() {
 		router.replace('/post')
 	}
 	const ProfilePage = () => {
-		router.replace('/ProfilePage')
+		router.replace(`/profilepage/${user}`)
 	}
 	const login = () => {
 		router.replace('/login')
 	}
 	const logout = () => {
-		fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/logout`, {
-			credentials: "include"
-		})
-			.then(r => console.log(r))
+		router.push('/logout')
 	}
 
 	return (
-		<div>
+		<Box sx={{display: 'flex', alignItems: 'center'}}>
 			<Link href={'/'} className={styles.wrap}>
 				< Image
 					src={logo}
@@ -61,23 +54,27 @@ export default function Header() {
 				<LeaderboardIcon className={styles.icon} />
 			</IconButton>
 			{
-				check ?
+				user ?
 					<IconButton onClick={postPage}>
 						<TelegramIcon className={styles.icon} />
 					</IconButton> : ""
 			}
 			{
-				check ?
+				user ?
 					<IconButton onClick={ProfilePage}>
 						<PersonIcon className={styles.icon} />
 					</IconButton> : ""
 			}
 			{
-				check ? <LogoutIcon className={styles.icon} onClick={logout} /> :
+				user ?
+					<IconButton onClick={logout}>
+						<LogoutIcon className={styles.icon} />
+					</IconButton>
+					:
 					<IconButton onClick={login}>
 						<LoginIcon className={styles.icon} />
 					</IconButton>
 			}
-		</div >
+		</Box >
 	)
 } 
