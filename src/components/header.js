@@ -2,7 +2,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import logo from '../images/homelogo.png'
 import IconButton from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
@@ -10,8 +9,9 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import styles from "@/styles/header.module.css";
 import LoginIcon from '@mui/icons-material/Login';
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+import Box from "@mui/material/Box";
 
 export default function Header({user, setUser}) {
 	const router = useRouter()
@@ -39,7 +39,7 @@ export default function Header({user, setUser}) {
 	}
 
 	return (
-		<div>
+		<Box sx={{display: 'flex', alignItems: 'center'}}>
 			<Link href={'/'} className={styles.wrap}>
 				< Image
 					src={logo}
@@ -66,11 +66,15 @@ export default function Header({user, setUser}) {
 					</IconButton> : ""
 			}
 			{
-				user ? <LogoutIcon className={styles.icon} onClick={logout} /> :
+				user ?
+					<IconButton onClick={logout}>
+						<LogoutIcon className={styles.icon} />
+					</IconButton>
+					:
 					<IconButton onClick={login}>
 						<LoginIcon className={styles.icon} />
 					</IconButton>
 			}
-		</div >
+		</Box >
 	)
 } 
