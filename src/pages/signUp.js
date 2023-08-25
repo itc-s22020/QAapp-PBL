@@ -1,10 +1,16 @@
 import Link from 'next/link';
 import styles from '../styles/signUp.module.css'
 import { useState } from 'react';
+import {Alert} from "@mui/material";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
+import {useRouter} from "next/router";
+import Box from "@mui/material/Box";
 
 export default function SignUp() {
+  const router = useRouter()
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedName, setSelectedName] = useState('');
+  const [selectedUserId, setSelectedUserId] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
   const [selectedPassword, setSelectedPassword] = useState('');
   const [selectedPasswordconfirmation, setSelectedPasswordconfirmation] = useState('');
@@ -12,12 +18,9 @@ export default function SignUp() {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
+  const [selectedAge, setSelectedAge] = useState('');
 
-/*  fetch(`${API_HOST}/api/user/check`, {credentials: 'include'})
-    .then((r) => r.json())
-    .then((d) => {
-        console.log(`${d.user}としてログインしています`)
-    })*/
+  const [error, setError] = useState('')
 
   const StartYear = 1970;
   const endYear = 2023;
@@ -47,6 +50,10 @@ export default function SignUp() {
     setSelectedEmail(e.target.value);
   };
 
+  const handleUserIdChange = (e) => {
+    setSelectedUserId(e.target.value);
+  };
+
   const handleNameChange = (e) => {
     setSelectedName(e.target.value);
   };
@@ -67,11 +74,46 @@ export default function SignUp() {
     setSelectedGender(e.target.value);
   };
 
+  const handleAgeChange = (e) => {
+    setSelectedAge(e.target.value);
+  };
+
   const handleSubmit = async(e) => {
     e.preventDefault()
     if (selectedPassword !== selectedPasswordconfirmation){
 	    return
     }
+  }
+
+  const handleSignUp = () => {
+      const data = {
+          user_id: selectedUserId,
+          password: selectedPassword,
+          name: selectedName,
+          age: selectedAge,
+          mail: selectedEmail,
+          gender: selectedGender
+      }
+      console.log(data)
+      fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/user/register`, {
+          method: 'post',
+          body: JSON.stringify(data),
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+      })
+          .then((r) => {
+              if (r.status === 200) {
+                  return r.json()
+              } else {
+                  return r.json().then((d) => setError(d.message))
+              }
+          }).then((d) => {
+              if (!d) return
+          //login
+          router.push('/')
+      })
   }
   return (
     <div className={styles.container}>
@@ -86,10 +128,19 @@ export default function SignUp() {
             onChange={handleEmailChange}
 	    required
 	  />
-          <p>プロフィール名</p>
+          <p>ユーザーID</p>
 	  <input
 	    className={styles.input2}
-	    type="name" 
+	    type="userid"
+	    aria-label=".form-control-lg example"
+	    value={selectedUserId}
+	    onChange={handleUserIdChange}
+	    required
+	  />
+        <p>プロフィール名</p>
+	  <input
+	    className={styles.input2}
+	    type="name"
 	    aria-label=".form-control-lg example"
 	    value={selectedName}
 	    onChange={handleNameChange}
@@ -123,7 +174,7 @@ export default function SignUp() {
 	      type="radio"
 	      name="inlineRadioOptions"
 	      id="inlineRadio1"
-	      value="男性"
+	      value={0}
 	      required
 	      onChange={handleGenderChange}
 	    />
@@ -136,7 +187,7 @@ export default function SignUp() {
                 type="radio"
                 name="inlineRadioOptions"
                 id="inlineRadio2"
-                value="女性"
+                value={1}
                 required
                 onChange={handleGenderChange}
               />
@@ -149,7 +200,7 @@ export default function SignUp() {
               type="radio"
               name="inlineRadioOptions"
               id="inlineRadio3"
-              value="無回答"
+              value={2}
               required
               onChange={handleGenderChange}
             />
@@ -158,6 +209,10 @@ export default function SignUp() {
               htmlFor="inlineRadio3">無回答
             </label>
 	  </div>
+        年齢:
+        <Box sx={{textAlign: 'center'}}>
+            <input type="number" max={100} min={5} onChange={handleAgeChange}/>歳
+        </Box>
 	  <div className={`${styles.birthDateContainer}`}>
 	    <p>生年月日</p>
 	    <div className={`${styles.option1}`}>
@@ -188,17 +243,17 @@ export default function SignUp() {
 	    </div>
 	  </div>
 	</div>
+        {error ? <Alert severity={"error"}>{error}</Alert> : <></>}
         <div className={styles.footer}>
-	  <Link href="/Login">
             <button
 	      type="submit"
 	      id="button"
 	      className={styles.blueButton}
-	      disabled={!selectedEmail || !selectedName || !selectedPassword  || !selectedGender || !selectedYear || !selectedMonth || !selectedDay}
+	      // disabled={!selectedEmail || !selectedName || !selectedPassword  || !selectedGender || !selectedYear || !selectedMonth || !selectedDay}
+          onClick={handleSignUp}
 	    >
 	    新規登録
 	    </button>
-	  </Link>
         </div>
     </div>
  );
