@@ -80,7 +80,7 @@ const Home = () => {
   //質問全体の表示
   const NpProps = ({ q }) => (
     <>
-      {q.map(q => <Prop key={q.id} {...q} />)}
+      {q.map((q, i) => <Prop key={i} {...q} />)}
     </>
   )
 
