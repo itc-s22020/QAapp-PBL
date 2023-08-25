@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import styles from '../styles/signUp.module.css'
 import { useState } from 'react';
-import axios from "axios"
 
-export default function signUp() {
+export default function SignUp() {
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedName, setSelectedName] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
